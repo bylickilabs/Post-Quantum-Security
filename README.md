@@ -1,2 +1,23 @@
-# Post-Quantum-Security
-COMING SOON: Post-Quantum Security application for secure text and file encryption using ML-KEM, ML-DSA, AES-256-GCM, key management and local encrypted storage.
+> [!IMPORTANT]
+> **COMING SOON**
+>
+> BylickiLabs Quantum Security is currently under active development. Source code, documentation, releases, and further technical details will be published progressively.
+
+
+| The project focuses on **modern Post Quantum Security** and the secure processing of sensitive data. |
+|--|
+
+
+> Its core principles include:
+  - 🔐 **Local Security Architecture**
+  - 🛡️ **Strong Cryptographic Mechanisms**
+  - ⚛️ **Post Quantum Key Technologies**
+  - 🔑 **Secure Key Management**
+  - ✍️ **Digital Signatures**
+  - 📁 **Secure Text and File Encryption**
+
+> The development aims to combine **established security mechanisms** with **future-oriented Post Quantum Cryptography** within a standalone application.
+
+```yarn
+BylickiLabs Quantum Security is built for secure, future-ready Post Quantum Cryptography.
+```
