@@ -1,0 +1,4 @@
+PySide6>=6.11,<6.12
+cryptography>=50.0,<51
+argon2-cffi>=25.1,<26
+liboqs-python>=0.16,<0.17
