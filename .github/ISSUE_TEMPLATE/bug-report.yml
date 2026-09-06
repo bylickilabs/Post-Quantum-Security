@@ -1,5 +1,5 @@
 name: Bug Report
-description: Melde einen reproduzierbaren Fehler in BylickiLabs Post Quantum Security.
+description: Report a reproducible bug in BylickiLabs Post Quantum Security.
 title: "[Bug] "
 labels: []
 body:
@@ -8,154 +8,133 @@ body:
       value: |
         # 🐞 Bug Report
 
-        Verwende dieses Formular für reproduzierbare Fehler der Anwendung, die keinem spezielleren Formular eindeutig zugeordnet werden können.
+        Use this form for reproducible application bugs that do not clearly belong to a more specific report form.
 
-        **Alle nachfolgenden Angaben sind verpflichtend.** Falls eine Information nicht bekannt ist, trage `Nicht bekannt` ein. Falls ein Punkt nicht zutrifft oder keine Daten vorliegen, trage `Nicht zutreffend` bzw. `Keine vorhanden` ein.
+        **All fields below are required.** If information is unknown, enter `Unknown`. If a field does not apply or no data is available, enter `Not applicable` or `None available`.
 
-        **Sicherheitskritische Schwachstellen dürfen nicht öffentlich als Issue gemeldet werden.** Verwende dafür den separaten Security-Hinweis im Issue-Auswahlmenü.
+        **Do not report security-critical vulnerabilities publicly.** Use the dedicated security contact shown in the issue chooser instead.
 
   - type: textarea
     id: bug_description
     attributes:
-      label: Fehlerbeschreibung
-      description: Beschreibe den Fehler präzise und eindeutig.
-      placeholder: Was funktioniert nicht und wie äußert sich der Fehler?
+      label: Bug description
+      description: Describe the problem precisely and unambiguously.
+      placeholder: What does not work and how does the issue appear?
     validations:
       required: true
 
   - type: textarea
     id: reproduction_steps
     attributes:
-      label: Schritte zur Reproduktion
-      description: Dokumentiere alle Schritte, mit denen sich der Fehler reproduzieren lässt.
+      label: Steps to reproduce
+      description: Document every step required to reproduce the issue.
       placeholder: |
-        1. Anwendung starten
+        1. Start the application
         2. ...
         3. ...
-        4. Fehler tritt auf
+        4. The issue occurs
     validations:
       required: true
 
   - type: textarea
     id: expected_behavior
     attributes:
-      label: Erwartetes Verhalten
-      description: Beschreibe das korrekte erwartete Verhalten.
-      placeholder: Erwartet wurde ...
+      label: Expected behavior
+      placeholder: What should have happened?
     validations:
       required: true
 
   - type: textarea
     id: actual_behavior
     attributes:
-      label: Tatsächliches Verhalten
-      description: Beschreibe exakt, was stattdessen passiert.
-      placeholder: Tatsächlich passiert ...
+      label: Actual behavior
+      placeholder: What happened instead?
     validations:
       required: true
 
   - type: dropdown
     id: reproducibility
     attributes:
-      label: Reproduzierbarkeit
-      description: Wie zuverlässig tritt der Fehler auf?
+      label: Reproducibility
       options:
-        - Immer
-        - Häufig
-        - Sporadisch
-        - Einmalig
+        - Always
+        - Frequently
+        - Intermittently
+        - Once
     validations:
       required: true
 
   - type: input
     id: app_version
     attributes:
-      label: Anwendungsversion
-      description: Gib die verwendete Version von Post Quantum Security an.
-      placeholder: z. B. 1.1.0 oder Commit-SHA
+      label: Application version
+      placeholder: e.g. 1.1.0 or commit SHA
     validations:
       required: true
 
-  - type: input
-    id: windows_version
+  - type: dropdown
+    id: affected_area
     attributes:
-      label: Windows-Version
-      description: Gib Windows-Version, Edition und Build an.
-      placeholder: z. B. Windows 11 Pro 24H2, Build ...
-    validations:
-      required: true
-
-  - type: input
-    id: python_version
-    attributes:
-      label: Python-Version
-      description: Gib die exakt verwendete Python-Version an.
-      placeholder: z. B. Python 3.13.x
-    validations:
-      required: true
-
-  - type: input
-    id: start_method
-    attributes:
-      label: Startmethode
-      description: Gib an, wie die Anwendung gestartet wurde.
-      placeholder: z. B. main.py, run_windows.bat, IDE
-    validations:
-      required: true
-
-  - type: textarea
-    id: affected_component
-    attributes:
-      label: Betroffene Komponente
-      description: Nenne den betroffenen Bereich der Anwendung.
-      placeholder: z. B. Text, Dateien, Schlüssel, Signaturen, Datenbank, GUI, Sprache
+      label: Affected area
+      options:
+        - Application startup
+        - User interface
+        - Text encryption / decryption
+        - File encryption / decryption
+        - Key generation / key management
+        - SQLite Key Vault
+        - Digital signatures / verification
+        - Language / localization
+        - Installation / dependencies
+        - Other
     validations:
       required: true
 
   - type: textarea
     id: environment
     attributes:
-      label: Relevante Umgebung und Abhängigkeiten
-      description: Dokumentiere relevante Paketversionen und Systemkomponenten.
+      label: Environment
       placeholder: |
-        PySide6 = ...
-        cryptography = ...
-        argon2-cffi = ...
-        liboqs-python = ...
-        liboqs / OQS = ...
-        Weitere relevante Komponenten = ...
+        Windows version = ...
+        Python version = ...
+        PySide6 version = ...
+        cryptography version = ...
+        argon2-cffi version = ...
+        liboqs-python version = ...
     validations:
       required: true
 
   - type: textarea
-    id: logs
+    id: error_output
     attributes:
-      label: Logs / Fehlermeldungen
-      description: Füge relevante Ausgaben ein. Entferne Passwörter, private Schlüssel und sonstige Geheimnisse.
+      label: Error message / traceback
+      description: Remove passwords, private keys, shared secrets, and confidential plaintext before submitting.
       render: shell
-      placeholder: Fehlermeldung, Traceback oder Keine vorhanden
+      placeholder: Error output or None available
     validations:
       required: true
 
   - type: textarea
-    id: additional_evidence
+    id: additional_context
     attributes:
-      label: Screenshots / weitere Nachweise
-      description: Ergänze Screenshots oder weitere technische Informationen. Keine vertraulichen Daten veröffentlichen.
-      placeholder: Nachweise oder Keine vorhanden
+      label: Additional context / evidence
+      description: Add screenshots, logs, or other technical evidence without confidential information.
+      placeholder: Additional details or None available
     validations:
       required: true
 
   - type: checkboxes
     id: confirmation
     attributes:
-      label: Bestätigung
+      label: Confirmation
       options:
-        - label: Ich habe geprüft, ob bereits ein Issue zum gleichen Fehler existiert.
+        - label: I checked whether an equivalent issue already exists.
           required: true
-        - label: Ich habe keine Passwörter, privaten Schlüssel, Shared Secrets oder andere vertrauliche Informationen veröffentlicht.
+        - label: I reproduced the reported behavior or accurately documented its reproducibility.
           required: true
-        - label: Es handelt sich nicht um eine sicherheitskritische Schwachstelle, die vertraulich gemeldet werden muss.
+        - label: I did not include passwords, private keys, shared secrets, or confidential plaintext.
           required: true
-        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+        - label: This report is not a security-critical vulnerability that requires confidential disclosure.
+          required: true
+        - label: All required fields have been completed.
           required: true
