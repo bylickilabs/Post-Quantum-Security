@@ -1,5 +1,5 @@
 name: Installation / Environment Report
-description: Dokumentiere Installations-, Start- und Abhängigkeitsprobleme unter Windows.
+description: Report installation, dependency, startup, or environment-specific problems.
 title: "[Install] "
 labels: []
 body:
@@ -8,154 +8,133 @@ body:
       value: |
         # 🧩 Installation / Environment Report
 
-        Verwende dieses Formular für Probleme bei Installation, Einrichtung, Abhängigkeiten oder dem Start von Post Quantum Security.
+        Use this form for reproducible setup, dependency, startup, or environment compatibility problems.
 
-        **Alle Angaben sind verpflichtend.** Falls eine Information nicht bekannt ist, trage `Nicht bekannt` ein.
+        **All fields are required. Do not include passwords, private keys, tokens, or confidential local paths containing secrets.**
 
   - type: dropdown
     id: affected_stage
     attributes:
-      label: Betroffener Bereich
+      label: Affected stage
       options:
-        - install-windows.ps1
-        - requirements.txt / pip install
-        - liboqs / liboqs-python
-        - Visual Studio Build Tools
-        - CMake
-        - Git
-        - Start über main.py
-        - Start über run_windows.bat
-        - PySide6 / GUI-Start
-        - Sonstige Umgebung
+        - Initial installation
+        - Dependency installation
+        - Visual Studio Build Tools / native build dependency
+        - liboqs / liboqs-python setup
+        - Starting with main.py
+        - Starting with run_windows.bat
+        - Starting after a previously successful installation
+        - Other environment problem
     validations:
       required: true
 
   - type: input
     id: app_version
     attributes:
-      label: Anwendungsversion
-      placeholder: z. B. 1.1.0 oder Commit-SHA
+      label: Application version
+      placeholder: e.g. 1.1.0 or commit SHA
     validations:
       required: true
 
   - type: input
     id: windows_version
     attributes:
-      label: Windows-Version
-      placeholder: z. B. Windows 11 Pro 24H2, Build ...
-    validations:
-      required: true
-
-  - type: input
-    id: architecture
-    attributes:
-      label: Systemarchitektur
-      placeholder: z. B. x64
+      label: Windows version / build
+      placeholder: e.g. Windows 11 24H2, build ...
     validations:
       required: true
 
   - type: input
     id: python_version
     attributes:
-      label: Python-Version
-      placeholder: z. B. Python 3.13.x
+      label: Python version
+      placeholder: e.g. Python 3.13.x 64-bit
     validations:
       required: true
 
   - type: textarea
     id: dependency_versions
     attributes:
-      label: Abhängigkeiten / Toolchain
+      label: Dependency versions
       placeholder: |
         PySide6 = ...
         cryptography = ...
         argon2-cffi = ...
         liboqs-python = ...
-        liboqs / OQS = ...
-        Git = ...
+        pip = ...
         CMake = ...
+        Git = ...
         Visual Studio Build Tools = ...
     validations:
       required: true
 
-  - type: dropdown
-    id: ml_kem_available
+  - type: textarea
+    id: pq_availability
     attributes:
-      label: ML-KEM-768 verfügbar
-      options:
-        - Ja
-        - Nein
-        - Nicht geprüft
-        - Nicht bekannt
-    validations:
-      required: true
-
-  - type: dropdown
-    id: ml_dsa_available
-    attributes:
-      label: ML-DSA-65 verfügbar
-      options:
-        - Ja
-        - Nein
-        - Nicht geprüft
-        - Nicht bekannt
+      label: Post-Quantum algorithm availability
+      placeholder: |
+        ML-KEM-768 available = Yes / No / Unknown
+        ML-DSA-65 available = Yes / No / Unknown
+        Additional liboqs details = ...
     validations:
       required: true
 
   - type: textarea
     id: installation_steps
     attributes:
-      label: Durchgeführte Installations- oder Startschritte
+      label: Performed installation / startup steps
       placeholder: |
         1. ...
         2. ...
         3. ...
-        4. Fehler tritt auf
+        4. Error occurs ...
     validations:
       required: true
 
   - type: textarea
-    id: expected_behavior
+    id: expected_result
     attributes:
-      label: Erwartetes Verhalten
-      placeholder: Erwartet wurde ...
+      label: Expected result
+      placeholder: What should have happened?
     validations:
       required: true
 
   - type: textarea
-    id: actual_behavior
+    id: actual_result
     attributes:
-      label: Tatsächliches Verhalten
-      placeholder: Tatsächlich passiert ...
+      label: Actual result
+      placeholder: What happened instead?
     validations:
       required: true
 
   - type: textarea
     id: error_output
     attributes:
-      label: Konsolenausgabe / Fehlermeldung
-      description: Entferne persönliche Pfade oder vertrauliche Daten, falls erforderlich.
+      label: Console output / traceback
+      description: Remove secrets and sensitive local information before submitting.
       render: shell
-      placeholder: Vollständige relevante Ausgabe
+      placeholder: Complete relevant error output or None available
     validations:
       required: true
 
   - type: textarea
-    id: attempted_fixes
+    id: additional_context
     attributes:
-      label: Bereits getestete Lösungsversuche
-      placeholder: Welche Schritte wurden bereits durchgeführt?
+      label: Additional environment details
+      placeholder: CPU architecture, virtual environment, installation method, PATH-related observations, or None available
     validations:
       required: true
 
   - type: checkboxes
     id: confirmation
     attributes:
-      label: Bestätigung
+      label: Confirmation
       options:
-        - label: Ich habe die verwendeten Versionen und die Startmethode vollständig angegeben.
+        - label: I followed the documented startup / installation procedure or described all deviations.
           required: true
-        - label: Die Fehlermeldung wurde ohne Passwörter, Schlüssel oder sonstige Geheimnisse veröffentlicht.
+        - label: I included the relevant environment and dependency versions.
           required: true
-        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+        - label: I removed passwords, private keys, tokens, and other confidential information.
+          required: true
+        - label: All required fields have been completed.
           required: true
