@@ -19,6 +19,7 @@
   - eigenem QSEC-Containerformat
   - einem gemeinsamen lokalen Sicherheitsworkflow
 
+> [!NOTE]
 > **English:** Post Quantum Security is a local desktop application with:
   - classical cryptography
   - post-quantum key encapsulation
