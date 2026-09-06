@@ -1,5 +1,5 @@
 name: Encryption / Decryption Report
-description: Dokumentiere Fehler oder Abweichungen bei Text- und Dateiverschlüsselung sowie Entschlüsselung.
+description: Report reproducible issues in text or file encryption and decryption workflows.
 title: "[Crypto] "
 labels: []
 body:
@@ -8,104 +8,104 @@ body:
       value: |
         # 🔐 Encryption / Decryption Report
 
-        Verwende dieses Formular für reproduzierbare Probleme in den Verschlüsselungs- und Entschlüsselungsworkflows von Post Quantum Security.
+        Use this form for reproducible problems in the encryption and decryption workflows of Post Quantum Security.
 
-        **Alle Angaben sind verpflichtend.** Veröffentliche niemals Passwörter, private Schlüssel, Shared Secrets oder unverschlüsselte vertrauliche Nutzdaten.
+        **All fields are required. Never publish passwords, private keys, shared secrets, or confidential plaintext.**
 
   - type: dropdown
     id: operation
     attributes:
-      label: Betroffener Vorgang
+      label: Affected operation
       options:
-        - Text verschlüsseln
-        - Text entschlüsseln
-        - Datei verschlüsseln
-        - Datei entschlüsseln
+        - Encrypt text
+        - Decrypt text
+        - Encrypt file
+        - Decrypt file
     validations:
       required: true
 
   - type: dropdown
     id: crypto_mode
     attributes:
-      label: Kryptografischer Modus
+      label: Cryptographic mode
       options:
-        - Passwortmodus / Argon2id + AES-256-GCM
-        - Post-Quantum-Modus / ML-KEM-768 + HKDF-SHA-256 + AES-256-GCM
+        - Password mode / Argon2id + AES-256-GCM
+        - Post-Quantum mode / ML-KEM-768 + HKDF-SHA-256 + AES-256-GCM
     validations:
       required: true
 
   - type: input
     id: app_version
     attributes:
-      label: Anwendungsversion
-      placeholder: z. B. 1.1.0 oder Commit-SHA
+      label: Application version
+      placeholder: e.g. 1.1.0 or commit SHA
     validations:
       required: true
 
   - type: input
     id: input_type
     attributes:
-      label: Eingabetyp / Dateiformat
-      description: Gib bei Dateien Dateityp und ungefähre Größe an. Keine vertraulichen Inhalte hochladen.
-      placeholder: z. B. TXT, PDF, PNG, 25 MB oder QSEC1-Textcontainer
+      label: Input type / file format
+      description: For files, provide the file type and approximate size. Do not upload confidential content.
+      placeholder: e.g. TXT, PDF, PNG, 25 MB, or QSEC1 text container
     validations:
       required: true
 
   - type: textarea
     id: workflow
     attributes:
-      label: Durchgeführter Workflow
-      description: Beschreibe den vollständigen Ablauf bis zum Fehler.
+      label: Performed workflow
+      description: Describe the complete sequence up to the failure.
       placeholder: |
-        1. Modus gewählt
-        2. Eingabe ausgewählt
-        3. Passwort / Public Key / Private Key ausgewählt
-        4. Vorgang gestartet
-        5. Ergebnis / Fehler ...
+        1. Selected mode
+        2. Selected input
+        3. Selected password / public key / private key
+        4. Started operation
+        5. Result / error ...
     validations:
       required: true
 
   - type: textarea
     id: expected_result
     attributes:
-      label: Erwartetes Ergebnis
-      placeholder: Was sollte erzeugt oder erfolgreich entschlüsselt werden?
+      label: Expected result
+      placeholder: What should have been created or successfully decrypted?
     validations:
       required: true
 
   - type: textarea
     id: actual_result
     attributes:
-      label: Tatsächliches Ergebnis
-      placeholder: Was ist tatsächlich passiert?
+      label: Actual result
+      placeholder: What happened instead?
     validations:
       required: true
 
   - type: dropdown
     id: qsec_container
     attributes:
-      label: QSEC-Container beteiligt
+      label: QSEC container involved
       options:
-        - Ja, .qsec Datei
-        - Ja, QSEC1 Textcontainer
-        - Nein
-        - Nicht bekannt
+        - Yes, .qsec file
+        - Yes, QSEC1 text container
+        - No
+        - Unknown
     validations:
       required: true
 
   - type: input
     id: key_algorithm
     attributes:
-      label: Verwendeter Schlüssel / Algorithmus
-      description: Keine Schlüsselwerte einfügen.
-      placeholder: z. B. ML-KEM-768 Public Key, ML-KEM-768 Private Key oder Nicht zutreffend
+      label: Key / algorithm used
+      description: Do not include actual key material.
+      placeholder: e.g. ML-KEM-768 public key, ML-KEM-768 private key, or Not applicable
     validations:
       required: true
 
   - type: textarea
     id: environment
     attributes:
-      label: Umgebung
+      label: Environment
       placeholder: |
         Windows = ...
         Python = ...
@@ -118,31 +118,31 @@ body:
   - type: textarea
     id: error_output
     attributes:
-      label: Fehlermeldung / Traceback
-      description: Entferne Geheimnisse und vertrauliche Nutzdaten.
+      label: Error message / traceback
+      description: Remove secrets and confidential data before submitting.
       render: shell
-      placeholder: Fehlermeldung oder Keine vorhanden
+      placeholder: Error output or None available
     validations:
       required: true
 
   - type: textarea
     id: reproducibility_notes
     attributes:
-      label: Reproduzierbarkeit / zusätzliche Beobachtungen
-      placeholder: Tritt der Fehler mit anderen Dateien, Schlüsseln oder nach einem Neustart ebenfalls auf?
+      label: Reproducibility / additional observations
+      placeholder: Does the issue also occur with other files, keys, or after restarting the application?
     validations:
       required: true
 
   - type: checkboxes
     id: confirmation
     attributes:
-      label: Bestätigung
+      label: Confirmation
       options:
-        - label: Ich habe den beschriebenen Workflow selbst reproduziert.
+        - label: I reproduced the described workflow myself.
           required: true
-        - label: Ich habe keine Passwörter, privaten Schlüssel, Shared Secrets oder vertraulichen Klartext veröffentlicht.
+        - label: I did not publish passwords, private keys, shared secrets, or confidential plaintext.
           required: true
-        - label: Es handelt sich nicht um eine vertraulich zu meldende sicherheitskritische Schwachstelle.
+        - label: This is not a security-critical vulnerability that should be disclosed confidentially.
           required: true
-        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+        - label: All required fields have been completed.
           required: true
