@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerability / Sicherheitskritische Schwachstelle
+    url: https://github.com/bylickilabs/Post-Quantum-Security#de-schwachstellen
+    about: Sicherheitskritische Schwachstellen dürfen nicht als öffentliches Issue gemeldet werden. Bitte beachte die Hinweise im Abschnitt Sicherheitskritische Schwachstellen.
