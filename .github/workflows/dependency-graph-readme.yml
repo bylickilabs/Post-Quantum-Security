@@ -1,5 +1,7 @@
 name: README Dependency Graph Snapshot
 
+# Keeps the README dependency snapshot synchronized with requirements.txt.
+
 on:
   push:
     branches:
