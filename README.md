@@ -4,6 +4,7 @@
 |---|
 
 | ![Python](https://img.shields.io/badge/Python-Desktop_Application-3776AB?logo=python&logoColor=white) | ![PySide6](https://img.shields.io/badge/GUI-PySide6-41CD52?logo=qt&logoColor=white) | ![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white) | ![Post Quantum](https://img.shields.io/badge/Post--Quantum-ML--KEM--768_%7C_ML--DSA--65-6f42c1) | ![Status](https://img.shields.io/badge/Development-Completed-success) |
+|---|---|---|---|---|
 
 | <img width="1280" height="640" alt="PQS" src="https://github.com/user-attachments/assets/4e17ea71-5ba9-44a0-9ec0-e696733e7a44" /> |
 |---|
