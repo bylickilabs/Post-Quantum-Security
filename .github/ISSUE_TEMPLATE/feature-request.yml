@@ -1,0 +1,135 @@
+name: Feature Request
+description: Schlage neue Funktionen oder gezielte Erweiterungen für Post Quantum Security vor.
+title: "[Feature] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🚀 Feature Request
+
+        Verwende dieses Formular für neue Funktionen, Workflow-Verbesserungen oder technische Erweiterungen von Post Quantum Security.
+
+        Der Vorschlag soll klar abgegrenzt, technisch nachvollziehbar und hinsichtlich Nutzen sowie Auswirkungen bewertbar sein.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Kategorie
+      options:
+        - Textverschlüsselung
+        - Dateiverschlüsselung
+        - ML-KEM / Post-Quantum-Workflow
+        - ML-DSA / Signaturen
+        - Schlüsselverwaltung
+        - SQLite Key Vault
+        - QSEC-Container
+        - Benutzeroberfläche
+        - Installation / Setup
+        - Dokumentation
+        - Tests / Qualitätssicherung
+        - Sonstige Erweiterung
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature_summary
+    attributes:
+      label: Beschreibung des gewünschten Features
+      placeholder: Was soll hinzugefügt, geändert oder erweitert werden?
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem_use_case
+    attributes:
+      label: Problem / konkreter Anwendungsfall
+      placeholder: Welches bestehende Problem oder welcher konkrete Workflow soll verbessert werden?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Vorgeschlagene Lösung
+      placeholder: Wie sollte die Funktion technisch oder funktional umgesetzt werden?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_workflow
+    attributes:
+      label: Gewünschter Ablauf
+      placeholder: |
+        1. Nutzer öffnet ...
+        2. Nutzer wählt ...
+        3. Anwendung führt ... aus
+        4. Ergebnis ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_benefit
+    attributes:
+      label: Erwarteter Nutzen
+      placeholder: Welchen konkreten Mehrwert bringt die Erweiterung?
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected_components
+    attributes:
+      label: Betroffene Komponenten
+      placeholder: z. B. GUI, crypto/core.py, container.py, database.py, pq.py, signatures.py
+    validations:
+      required: true
+
+  - type: textarea
+    id: security_impact
+    attributes:
+      label: Sicherheitsrelevante Auswirkungen
+      description: Beschreibe mögliche Auswirkungen auf Schlüsselmaterial, Containerformate, Kompatibilität oder kryptografische Workflows. Falls keine erwartet werden, `Keine bekannt` eintragen.
+      placeholder: Keine bekannt
+    validations:
+      required: true
+
+  - type: textarea
+    id: compatibility_impact
+    attributes:
+      label: Auswirkungen auf bestehende Daten / Kompatibilität
+      description: Berücksichtige bestehende .qsec-, .qkey-, .qpub-, .qsigkey-, .qsigpub- und .qsig-Dateien.
+      placeholder: Keine bekannt oder genaue Beschreibung
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Bereits geprüfte Alternativen
+      placeholder: Keine bekannt oder vorhandene Workarounds
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Akzeptanzkriterien
+      placeholder: |
+        - Funktion arbeitet wie beschrieben.
+        - Bestehende Workflows bleiben kompatibel.
+        - Sicherheitsrelevante Daten werden nicht ungeschützt verarbeitet.
+        - Reproduzierbare Tests sind erfolgreich.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      options:
+        - label: Ich habe geprüft, ob bereits ein vergleichbarer Feature Request existiert.
+          required: true
+        - label: Der Vorschlag enthält keine vertraulichen Schlüssel, Passwörter oder sonstigen Geheimnisse.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+          required: true
