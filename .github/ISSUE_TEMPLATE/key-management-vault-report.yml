@@ -1,0 +1,155 @@
+name: Key Management / Key Vault Report
+description: Dokumentiere Probleme bei ML-KEM-/ML-DSA-Schlüsseln, Export, Laden oder dem lokalen SQLite Key Vault.
+title: "[Keys/Vault] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🗝️ Key Management / Key Vault Report
+
+        Verwende dieses Formular für Probleme bei Schlüsselgenerierung, Schlüsseldateien, Fingerprints, Laden, Exportieren, Löschen oder dem lokalen SQLite Key Vault.
+
+        **Private Schlüssel, Passwörter und geheime Schlüsselwerte dürfen niemals öffentlich eingefügt werden.**
+
+  - type: dropdown
+    id: key_area
+    attributes:
+      label: Betroffener Bereich
+      options:
+        - ML-KEM-768 Keypair erzeugen
+        - ML-DSA-65 Keypair erzeugen
+        - Öffentlichen Schlüssel laden
+        - Privaten Schlüssel laden
+        - Schlüssel im Key Vault speichern
+        - Schlüssel aus dem Key Vault laden
+        - Schlüssel exportieren
+        - Key-Vault-Eintrag löschen
+        - Fingerprint
+        - Geladene Schlüsseldateien / loaded_keys
+        - Sonstiger Schlüsselverwaltungsbereich
+    validations:
+      required: true
+
+  - type: dropdown
+    id: key_type
+    attributes:
+      label: Schlüsseltyp
+      options:
+        - ML-KEM-768
+        - ML-DSA-65
+        - Nicht bekannt
+        - Nicht zutreffend
+    validations:
+      required: true
+
+  - type: input
+    id: file_extension
+    attributes:
+      label: Betroffenes Dateiformat
+      description: Keine Dateiinhalte oder Schlüsselwerte einfügen.
+      placeholder: z. B. .qpub, .qkey, .qsigpub, .qsigkey oder Nicht zutreffend
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Anwendungsversion
+      placeholder: z. B. 1.1.0 oder Commit-SHA
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Schritte zur Reproduktion
+      placeholder: |
+        1. Registerkarte Schlüssel öffnen
+        2. ...
+        3. ...
+        4. Fehler tritt auf
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Erwartetes Verhalten
+      placeholder: Erwartet wurde ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Tatsächliches Verhalten
+      placeholder: Tatsächlich passiert ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: vault_involved
+    attributes:
+      label: SQLite Key Vault beteiligt
+      options:
+        - Ja
+        - Nein
+        - Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: vault_path
+    attributes:
+      label: Key-Vault-Speicherort
+      description: Gib nur den Pfad an, keine Datenbankinhalte.
+      placeholder: z. B. %LOCALAPPDATA%\BylickiLabs\QuantumSecurity\quantum_security.db
+    validations:
+      required: true
+
+  - type: textarea
+    id: database_state
+    attributes:
+      label: Datenbankzustand / Beobachtung
+      description: Beschreibe, ob Einträge vorhanden, ladbar, exportierbar oder löschbar sind. Keine privaten Schlüssel einfügen.
+      placeholder: z. B. Eintrag sichtbar, Laden schlägt fehl, Export erzeugt keine Datei ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Umgebung und relevante Abhängigkeiten
+      placeholder: |
+        Windows = ...
+        Python = ...
+        liboqs-python = ...
+        cryptography = ...
+        argon2-cffi = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Fehlermeldung / Traceback
+      description: Entferne Schlüsselmaterial, Passwörter und sonstige Geheimnisse.
+      render: shell
+      placeholder: Fehlermeldung oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      options:
+        - label: Ich habe keine privaten Schlüssel, Passwörter oder andere geheime Schlüsselwerte veröffentlicht.
+          required: true
+        - label: Die Angaben beziehen sich auf einen reproduzierbaren Key-Management- oder Key-Vault-Vorgang.
+          required: true
+        - label: Es handelt sich nicht um eine vertraulich zu meldende sicherheitskritische Schwachstelle.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+          required: true
