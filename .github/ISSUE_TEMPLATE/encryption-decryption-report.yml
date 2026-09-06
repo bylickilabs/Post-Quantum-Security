@@ -1,0 +1,148 @@
+name: Encryption / Decryption Report
+description: Dokumentiere Fehler oder Abweichungen bei Text- und Dateiverschlüsselung sowie Entschlüsselung.
+title: "[Crypto] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🔐 Encryption / Decryption Report
+
+        Verwende dieses Formular für reproduzierbare Probleme in den Verschlüsselungs- und Entschlüsselungsworkflows von Post Quantum Security.
+
+        **Alle Angaben sind verpflichtend.** Veröffentliche niemals Passwörter, private Schlüssel, Shared Secrets oder unverschlüsselte vertrauliche Nutzdaten.
+
+  - type: dropdown
+    id: operation
+    attributes:
+      label: Betroffener Vorgang
+      options:
+        - Text verschlüsseln
+        - Text entschlüsseln
+        - Datei verschlüsseln
+        - Datei entschlüsseln
+    validations:
+      required: true
+
+  - type: dropdown
+    id: crypto_mode
+    attributes:
+      label: Kryptografischer Modus
+      options:
+        - Passwortmodus / Argon2id + AES-256-GCM
+        - Post-Quantum-Modus / ML-KEM-768 + HKDF-SHA-256 + AES-256-GCM
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Anwendungsversion
+      placeholder: z. B. 1.1.0 oder Commit-SHA
+    validations:
+      required: true
+
+  - type: input
+    id: input_type
+    attributes:
+      label: Eingabetyp / Dateiformat
+      description: Gib bei Dateien Dateityp und ungefähre Größe an. Keine vertraulichen Inhalte hochladen.
+      placeholder: z. B. TXT, PDF, PNG, 25 MB oder QSEC1-Textcontainer
+    validations:
+      required: true
+
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Durchgeführter Workflow
+      description: Beschreibe den vollständigen Ablauf bis zum Fehler.
+      placeholder: |
+        1. Modus gewählt
+        2. Eingabe ausgewählt
+        3. Passwort / Public Key / Private Key ausgewählt
+        4. Vorgang gestartet
+        5. Ergebnis / Fehler ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: Erwartetes Ergebnis
+      placeholder: Was sollte erzeugt oder erfolgreich entschlüsselt werden?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_result
+    attributes:
+      label: Tatsächliches Ergebnis
+      placeholder: Was ist tatsächlich passiert?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: qsec_container
+    attributes:
+      label: QSEC-Container beteiligt
+      options:
+        - Ja, .qsec Datei
+        - Ja, QSEC1 Textcontainer
+        - Nein
+        - Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: key_algorithm
+    attributes:
+      label: Verwendeter Schlüssel / Algorithmus
+      description: Keine Schlüsselwerte einfügen.
+      placeholder: z. B. ML-KEM-768 Public Key, ML-KEM-768 Private Key oder Nicht zutreffend
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Umgebung
+      placeholder: |
+        Windows = ...
+        Python = ...
+        cryptography = ...
+        argon2-cffi = ...
+        liboqs-python = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Fehlermeldung / Traceback
+      description: Entferne Geheimnisse und vertrauliche Nutzdaten.
+      render: shell
+      placeholder: Fehlermeldung oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducibility_notes
+    attributes:
+      label: Reproduzierbarkeit / zusätzliche Beobachtungen
+      placeholder: Tritt der Fehler mit anderen Dateien, Schlüsseln oder nach einem Neustart ebenfalls auf?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      options:
+        - label: Ich habe den beschriebenen Workflow selbst reproduziert.
+          required: true
+        - label: Ich habe keine Passwörter, privaten Schlüssel, Shared Secrets oder vertraulichen Klartext veröffentlicht.
+          required: true
+        - label: Es handelt sich nicht um eine vertraulich zu meldende sicherheitskritische Schwachstelle.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+          required: true
