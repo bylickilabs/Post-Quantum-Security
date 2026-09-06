@@ -653,7 +653,8 @@ Die Nutzung, Veränderung und Weitergabe des Projekts richtet sich nach den dort
 **Thorsten Bylicki**  
 **BYLICKILABS**
 
-GitHub: [github.com/bylickilabs](https://github.com/bylickilabs)
+[GITHUB](https://github.com/bylickilabs)
+[WEBSITE](https://bylickilabs.de)
 
 <br>
 
@@ -1232,4 +1233,5 @@ Use, modification and redistribution of this project are governed by the terms d
 **Thorsten Bylicki**  
 **BYLICKILABS**
 
-GitHub: [github.com/bylickilabs](https://github.com/bylickilabs)
+[GITHUB](https://github.com/bylickilabs)
+[WEBSITE](https://bylickilabs.de)
