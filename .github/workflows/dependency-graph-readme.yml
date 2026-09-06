@@ -59,13 +59,15 @@ jobs:
 
           start = "<!-- DEPENDENCY-GRAPH-SNAPSHOT:START -->"
           end = "<!-- DEPENDENCY-GRAPH-SNAPSHOT:END -->"
-          block = f"""{start}
-## Dependency Graph Snapshot — pip
-
-| Directory | Status | Details |
-| --- | --- | --- |
-| `/` | ✅ Ok | Found {count} {noun} |
-{end}"""
+          block = "\n".join([
+              start,
+              "## Dependency Graph Snapshot — pip",
+              "",
+              "| Directory | Status | Details |",
+              "| --- | --- | --- |",
+              f"| `/` | ✅ Ok | Found {count} {noun} |",
+              end,
+          ])
 
           text = readme.read_text(encoding="utf-8")
 
