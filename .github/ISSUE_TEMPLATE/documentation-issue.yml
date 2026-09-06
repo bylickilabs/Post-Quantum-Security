@@ -1,0 +1,123 @@
+name: Documentation Issue
+description: Melde fehlende, fehlerhafte, veraltete oder unklare Dokumentation zu Post Quantum Security.
+title: "[Documentation] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 📚 Documentation Issue
+
+        Verwende dieses Formular für Fehler, Unklarheiten oder fehlende Inhalte in README, Installationshinweisen oder technischer Dokumentation.
+
+        **Alle Angaben sind verpflichtend.** Falls ein Punkt nicht zutrifft, trage `Nicht zutreffend` ein.
+
+  - type: dropdown
+    id: documentation_type
+    attributes:
+      label: Art des Dokumentationsproblems
+      options:
+        - Fehlender Inhalt
+        - Fehlerhafter Inhalt
+        - Veralteter Inhalt
+        - Unklare oder missverständliche Formulierung
+        - Fehlerhafte Installationsanleitung
+        - Unvollständige Installationsanleitung
+        - Fehlerhafte technische Dokumentation
+        - Unvollständige technische Dokumentation
+        - Falscher Link oder Verweis
+        - Versionsangabe inkonsistent
+        - Sonstiges Dokumentationsproblem
+    validations:
+      required: true
+
+  - type: input
+    id: affected_document
+    attributes:
+      label: Betroffene Datei / Dokumentation
+      placeholder: z. B. README.md, install-windows.ps1, requirements.txt
+    validations:
+      required: true
+
+  - type: input
+    id: affected_section
+    attributes:
+      label: Betroffener Abschnitt
+      placeholder: z. B. Installation, Kryptografische Architektur, Sicherheit, Entwicklungsstatus
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_content
+    attributes:
+      label: Aktueller Inhalt / Zustand
+      placeholder: Welcher Inhalt ist aktuell vorhanden oder was fehlt?
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: Beschreibung des Problems
+      placeholder: Warum ist der aktuelle Inhalt falsch, unklar, veraltet oder unvollständig?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_content
+    attributes:
+      label: Erwarteter / korrekter Inhalt
+      placeholder: Welche Information oder Formulierung wäre korrekt?
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Betroffene Anwendungsversion
+      placeholder: z. B. 1.1.0, Commit-SHA oder Nicht zutreffend
+    validations:
+      required: true
+
+  - type: textarea
+    id: verification_context
+    attributes:
+      label: Kontext / Schritte zur Überprüfung
+      placeholder: |
+        1. Öffne ...
+        2. Navigiere zu ...
+        3. Vergleiche mit ...
+        4. Abweichung wird sichtbar
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical_reference
+    attributes:
+      label: Technische Referenz / Nachweise
+      description: Keine Passwörter, privaten Schlüssel oder vertraulichen Daten veröffentlichen.
+      placeholder: Code-Stelle, Log, Screenshot, offizielle Referenz oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_change
+    attributes:
+      label: Konkreter Änderungsvorschlag
+      placeholder: Welche Passage sollte ergänzt, ersetzt, entfernt oder neu strukturiert werden?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      options:
+        - label: Ich habe geprüft, ob das Dokumentationsproblem bereits als Issue existiert.
+          required: true
+        - label: Ich habe die betroffene Dokumentation selbst geprüft.
+          required: true
+        - label: Meine Angaben enthalten keine Passwörter, privaten Schlüssel oder andere vertrauliche Informationen.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+          required: true
