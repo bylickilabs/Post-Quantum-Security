@@ -1,0 +1,161 @@
+name: Bug Report
+description: Melde einen reproduzierbaren Fehler in BylickiLabs Post Quantum Security.
+title: "[Bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🐞 Bug Report
+
+        Verwende dieses Formular für reproduzierbare Fehler der Anwendung, die keinem spezielleren Formular eindeutig zugeordnet werden können.
+
+        **Alle nachfolgenden Angaben sind verpflichtend.** Falls eine Information nicht bekannt ist, trage `Nicht bekannt` ein. Falls ein Punkt nicht zutrifft oder keine Daten vorliegen, trage `Nicht zutreffend` bzw. `Keine vorhanden` ein.
+
+        **Sicherheitskritische Schwachstellen dürfen nicht öffentlich als Issue gemeldet werden.** Verwende dafür den separaten Security-Hinweis im Issue-Auswahlmenü.
+
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Fehlerbeschreibung
+      description: Beschreibe den Fehler präzise und eindeutig.
+      placeholder: Was funktioniert nicht und wie äußert sich der Fehler?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Schritte zur Reproduktion
+      description: Dokumentiere alle Schritte, mit denen sich der Fehler reproduzieren lässt.
+      placeholder: |
+        1. Anwendung starten
+        2. ...
+        3. ...
+        4. Fehler tritt auf
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Erwartetes Verhalten
+      description: Beschreibe das korrekte erwartete Verhalten.
+      placeholder: Erwartet wurde ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Tatsächliches Verhalten
+      description: Beschreibe exakt, was stattdessen passiert.
+      placeholder: Tatsächlich passiert ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reproducibility
+    attributes:
+      label: Reproduzierbarkeit
+      description: Wie zuverlässig tritt der Fehler auf?
+      options:
+        - Immer
+        - Häufig
+        - Sporadisch
+        - Einmalig
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Anwendungsversion
+      description: Gib die verwendete Version von Post Quantum Security an.
+      placeholder: z. B. 1.1.0 oder Commit-SHA
+    validations:
+      required: true
+
+  - type: input
+    id: windows_version
+    attributes:
+      label: Windows-Version
+      description: Gib Windows-Version, Edition und Build an.
+      placeholder: z. B. Windows 11 Pro 24H2, Build ...
+    validations:
+      required: true
+
+  - type: input
+    id: python_version
+    attributes:
+      label: Python-Version
+      description: Gib die exakt verwendete Python-Version an.
+      placeholder: z. B. Python 3.13.x
+    validations:
+      required: true
+
+  - type: input
+    id: start_method
+    attributes:
+      label: Startmethode
+      description: Gib an, wie die Anwendung gestartet wurde.
+      placeholder: z. B. main.py, run_windows.bat, IDE
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected_component
+    attributes:
+      label: Betroffene Komponente
+      description: Nenne den betroffenen Bereich der Anwendung.
+      placeholder: z. B. Text, Dateien, Schlüssel, Signaturen, Datenbank, GUI, Sprache
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Relevante Umgebung und Abhängigkeiten
+      description: Dokumentiere relevante Paketversionen und Systemkomponenten.
+      placeholder: |
+        PySide6 = ...
+        cryptography = ...
+        argon2-cffi = ...
+        liboqs-python = ...
+        liboqs / OQS = ...
+        Weitere relevante Komponenten = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Fehlermeldungen
+      description: Füge relevante Ausgaben ein. Entferne Passwörter, private Schlüssel und sonstige Geheimnisse.
+      render: shell
+      placeholder: Fehlermeldung, Traceback oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_evidence
+    attributes:
+      label: Screenshots / weitere Nachweise
+      description: Ergänze Screenshots oder weitere technische Informationen. Keine vertraulichen Daten veröffentlichen.
+      placeholder: Nachweise oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      options:
+        - label: Ich habe geprüft, ob bereits ein Issue zum gleichen Fehler existiert.
+          required: true
+        - label: Ich habe keine Passwörter, privaten Schlüssel, Shared Secrets oder andere vertrauliche Informationen veröffentlicht.
+          required: true
+        - label: Es handelt sich nicht um eine sicherheitskritische Schwachstelle, die vertraulich gemeldet werden muss.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+          required: true
