@@ -6,7 +6,7 @@
 | Lokale Desktopanwendung für klassische Kryptografie und standardisierte Post-Quantum-Verfahren| 
 |---|
 
-| [⬇ Download Post Quantum Security v1.0.0](https://github.com/bylickilabs/Post-Quantum-Security/releases/download/v1.0.0/Post-Quantum-Security-v1.0.0.zip) | [⬇ Latest Release](https://github.com/bylickilabs/Post-Quantum-Security/releases/latest) |
+| [⬇ Download Post Quantum Security v1.0.0](https://github.com/bylickilabs/Post-Quantum-Security/actions/runs/34053243582/artifacts/9995189157) | [⬇ Latest Release](https://github.com/bylickilabs/Post-Quantum-Security/releases/latest) |
 |---|---|
 
 <!-- DEPENDENCY-GRAPH-SNAPSHOT:START -->
