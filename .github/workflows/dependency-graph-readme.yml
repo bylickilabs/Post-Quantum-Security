@@ -1,0 +1,113 @@
+name: README Dependency Graph Snapshot
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - requirements.txt
+      - .github/workflows/dependency-graph-readme.yml
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: readme-dependency-graph-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update-readme:
+    name: Update Dependency Graph Snapshot
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Update README dependency snapshot
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          requirements = Path("requirements.txt")
+          readme = Path("README.md")
+
+          if not requirements.is_file():
+              raise SystemExit("requirements.txt not found")
+          if not readme.is_file():
+              raise SystemExit("README.md not found")
+
+          dependencies = []
+          for raw_line in requirements.read_text(encoding="utf-8").splitlines():
+              line = raw_line.strip()
+              if not line or line.startswith("#"):
+                  continue
+              if line.startswith(("-r ", "--requirement ", "-c ", "--constraint ", "--")):
+                  continue
+              dependency = line.split(" #", 1)[0].strip()
+              if dependency:
+                  dependencies.append(dependency)
+
+          count = len(dependencies)
+          noun = "dependency" if count == 1 else "dependencies"
+
+          start = "<!-- DEPENDENCY-GRAPH-SNAPSHOT:START -->"
+          end = "<!-- DEPENDENCY-GRAPH-SNAPSHOT:END -->"
+          block = f"""{start}
+## Dependency Graph Snapshot — pip
+
+| Directory | Status | Details |
+| --- | --- | --- |
+| `/` | ✅ Ok | Found {count} {noun} |
+{end}"""
+
+          text = readme.read_text(encoding="utf-8")
+
+          if start in text and end in text:
+              before = text.split(start, 1)[0].rstrip()
+              after = text.split(end, 1)[1].lstrip()
+              updated = f"{before}\n\n{block}\n\n{after}"
+          else:
+              lines = text.splitlines()
+              insert_at = 1 if lines and lines[0].startswith("# ") else 0
+              lines[insert_at:insert_at] = ["", block, ""]
+              updated = "\n".join(lines)
+              if text.endswith("\n"):
+                  updated += "\n"
+
+          if updated != text:
+              readme.write_text(updated, encoding="utf-8")
+              print(f"README updated: Found {count} {noun}.")
+          else:
+              print(f"README already current: Found {count} {noun}.")
+          PY
+
+      - name: Commit README update
+        shell: bash
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "README dependency snapshot is already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update README dependency graph snapshot"
+          git push
+
+      - name: Write job summary
+        shell: bash
+        run: |
+          count=$(grep -Ev '^\s*(#|$)' requirements.txt | grep -Ev '^\s*(-r|--requirement|-c|--constraint|--)' | wc -l | tr -d ' ')
+          {
+            echo "## Dependency Graph Snapshot — pip"
+            echo
+            echo "| Directory | Status | Details |"
+            echo "| --- | --- | --- |"
+            echo "| / | ✅ Ok | Found ${count} dependencies |"
+          } >> "$GITHUB_STEP_SUMMARY"
