@@ -1,5 +1,5 @@
 name: Feature Request
-description: Schlage neue Funktionen oder gezielte Erweiterungen für Post Quantum Security vor.
+description: Propose a new feature, workflow, compatibility improvement, or technical extension.
 title: "[Feature] "
 labels: []
 body:
@@ -8,128 +8,127 @@ body:
       value: |
         # 🚀 Feature Request
 
-        Verwende dieses Formular für neue Funktionen, Workflow-Verbesserungen oder technische Erweiterungen von Post Quantum Security.
+        Use this form to propose a clearly scoped improvement to Post Quantum Security.
 
-        Der Vorschlag soll klar abgegrenzt, technisch nachvollziehbar und hinsichtlich Nutzen sowie Auswirkungen bewertbar sein.
+        **All fields are required.** Do not include confidential information or security-sensitive implementation details that should be disclosed privately.
 
   - type: dropdown
-    id: category
+    id: feature_category
     attributes:
-      label: Kategorie
+      label: Feature category
       options:
-        - Textverschlüsselung
-        - Dateiverschlüsselung
-        - ML-KEM / Post-Quantum-Workflow
-        - ML-DSA / Signaturen
-        - Schlüsselverwaltung
-        - SQLite Key Vault
-        - QSEC-Container
-        - Benutzeroberfläche
-        - Installation / Setup
-        - Dokumentation
-        - Tests / Qualitätssicherung
-        - Sonstige Erweiterung
+        - Encryption / decryption
+        - Post-Quantum cryptography
+        - Key management / Key Vault
+        - Digital signatures / verification
+        - QSEC container workflow
+        - User interface / usability
+        - Installation / environment support
+        - Documentation
+        - Testing / quality assurance
+        - Other
     validations:
       required: true
 
   - type: textarea
     id: feature_summary
     attributes:
-      label: Beschreibung des gewünschten Features
-      placeholder: Was soll hinzugefügt, geändert oder erweitert werden?
+      label: Feature summary
+      description: Describe what should be added, changed, or improved.
+      placeholder: What should the application do differently or additionally?
     validations:
       required: true
 
   - type: textarea
     id: problem_use_case
     attributes:
-      label: Problem / konkreter Anwendungsfall
-      placeholder: Welches bestehende Problem oder welcher konkrete Workflow soll verbessert werden?
+      label: Problem / use case
+      description: Explain the concrete problem or workflow the proposal addresses.
+      placeholder: What limitation exists today and when does it matter?
     validations:
       required: true
 
   - type: textarea
     id: proposed_solution
     attributes:
-      label: Vorgeschlagene Lösung
-      placeholder: Wie sollte die Funktion technisch oder funktional umgesetzt werden?
+      label: Proposed solution
+      placeholder: Describe the desired technical or functional implementation.
     validations:
       required: true
 
   - type: textarea
     id: expected_workflow
     attributes:
-      label: Gewünschter Ablauf
+      label: Expected workflow
       placeholder: |
-        1. Nutzer öffnet ...
-        2. Nutzer wählt ...
-        3. Anwendung führt ... aus
-        4. Ergebnis ...
+        1. User opens ...
+        2. User selects ...
+        3. Application performs ...
+        4. Result ...
     validations:
       required: true
 
   - type: textarea
     id: expected_benefit
     attributes:
-      label: Erwarteter Nutzen
-      placeholder: Welchen konkreten Mehrwert bringt die Erweiterung?
+      label: Expected benefit
+      placeholder: What practical, security, usability, compatibility, or maintenance benefit would this provide?
     validations:
       required: true
 
   - type: textarea
     id: affected_components
     attributes:
-      label: Betroffene Komponenten
-      placeholder: z. B. GUI, crypto/core.py, container.py, database.py, pq.py, signatures.py
-    validations:
-      required: true
-
-  - type: textarea
-    id: security_impact
-    attributes:
-      label: Sicherheitsrelevante Auswirkungen
-      description: Beschreibe mögliche Auswirkungen auf Schlüsselmaterial, Containerformate, Kompatibilität oder kryptografische Workflows. Falls keine erwartet werden, `Keine bekannt` eintragen.
-      placeholder: Keine bekannt
+      label: Affected components
+      placeholder: e.g. GUI, crypto/core.py, pq.py, keys.py, signatures.py, database.py, installer, documentation
     validations:
       required: true
 
   - type: textarea
     id: compatibility_impact
     attributes:
-      label: Auswirkungen auf bestehende Daten / Kompatibilität
-      description: Berücksichtige bestehende .qsec-, .qkey-, .qpub-, .qsigkey-, .qsigpub- und .qsig-Dateien.
-      placeholder: Keine bekannt oder genaue Beschreibung
+      label: Compatibility / migration impact
+      placeholder: Describe possible effects on existing QSEC files, key files, database entries, settings, or dependencies. Enter None known if none are expected.
     validations:
       required: true
 
   - type: textarea
     id: alternatives
     attributes:
-      label: Bereits geprüfte Alternativen
-      placeholder: Keine bekannt oder vorhandene Workarounds
+      label: Alternatives considered
+      placeholder: Existing workaround, alternative design, or None known
     validations:
       required: true
 
   - type: textarea
     id: acceptance_criteria
     attributes:
-      label: Akzeptanzkriterien
+      label: Acceptance criteria
       placeholder: |
-        - Funktion arbeitet wie beschrieben.
-        - Bestehende Workflows bleiben kompatibel.
-        - Sicherheitsrelevante Daten werden nicht ungeschützt verarbeitet.
-        - Reproduzierbare Tests sind erfolgreich.
+        - The feature behaves as described.
+        - Existing supported workflows continue to work.
+        - Relevant tests pass.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      placeholder: References, mockups, non-sensitive technical notes, or None available
     validations:
       required: true
 
   - type: checkboxes
     id: confirmation
     attributes:
-      label: Bestätigung
+      label: Confirmation
       options:
-        - label: Ich habe geprüft, ob bereits ein vergleichbarer Feature Request existiert.
+        - label: I checked whether a comparable feature request already exists.
           required: true
-        - label: Der Vorschlag enthält keine vertraulichen Schlüssel, Passwörter oder sonstigen Geheimnisse.
+        - label: I described the proposal and expected benefit as concretely as possible.
           required: true
-        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+        - label: I did not include confidential or security-sensitive information that requires private disclosure.
+          required: true
+        - label: All required fields have been completed.
           required: true
