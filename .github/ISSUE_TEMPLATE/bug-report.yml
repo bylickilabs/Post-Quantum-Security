@@ -1,0 +1,140 @@
+name: Bug Report
+description: Report a reproducible bug in BylickiLabs Post Quantum Security.
+title: "[Bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🐞 Bug Report
+
+        Use this form for reproducible application bugs that do not clearly belong to a more specific report form.
+
+        **All fields below are required.** If information is unknown, enter `Unknown`. If a field does not apply or no data is available, enter `Not applicable` or `None available`.
+
+        **Do not report security-critical vulnerabilities publicly.** Use the dedicated security contact shown in the issue chooser instead.
+
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Bug description
+      description: Describe the problem precisely and unambiguously.
+      placeholder: What does not work and how does the issue appear?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Steps to reproduce
+      description: Document every step required to reproduce the issue.
+      placeholder: |
+        1. Start the application
+        2. ...
+        3. ...
+        4. The issue occurs
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected behavior
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual behavior
+      placeholder: What happened instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reproducibility
+    attributes:
+      label: Reproducibility
+      options:
+        - Always
+        - Frequently
+        - Intermittently
+        - Once
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Application version
+      placeholder: e.g. 1.1.0 or commit SHA
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected_area
+    attributes:
+      label: Affected area
+      options:
+        - Application startup
+        - User interface
+        - Text encryption / decryption
+        - File encryption / decryption
+        - Key generation / key management
+        - SQLite Key Vault
+        - Digital signatures / verification
+        - Language / localization
+        - Installation / dependencies
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: |
+        Windows version = ...
+        Python version = ...
+        PySide6 version = ...
+        cryptography version = ...
+        argon2-cffi version = ...
+        liboqs-python version = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Error message / traceback
+      description: Remove passwords, private keys, shared secrets, and confidential plaintext before submitting.
+      render: shell
+      placeholder: Error output or None available
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context / evidence
+      description: Add screenshots, logs, or other technical evidence without confidential information.
+      placeholder: Additional details or None available
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I checked whether an equivalent issue already exists.
+          required: true
+        - label: I reproduced the reported behavior or accurately documented its reproducibility.
+          required: true
+        - label: I did not include passwords, private keys, shared secrets, or confidential plaintext.
+          required: true
+        - label: This report is not a security-critical vulnerability that requires confidential disclosure.
+          required: true
+        - label: All required fields have been completed.
+          required: true

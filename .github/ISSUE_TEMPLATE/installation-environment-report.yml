@@ -1,0 +1,140 @@
+name: Installation / Environment Report
+description: Report installation, dependency, startup, or environment-specific problems.
+title: "[Install] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🧩 Installation / Environment Report
+
+        Use this form for reproducible setup, dependency, startup, or environment compatibility problems.
+
+        **All fields are required. Do not include passwords, private keys, tokens, or confidential local paths containing secrets.**
+
+  - type: dropdown
+    id: affected_stage
+    attributes:
+      label: Affected stage
+      options:
+        - Initial installation
+        - Dependency installation
+        - Visual Studio Build Tools / native build dependency
+        - liboqs / liboqs-python setup
+        - Starting with main.py
+        - Starting with run_windows.bat
+        - Starting after a previously successful installation
+        - Other environment problem
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Application version
+      placeholder: e.g. 1.1.0 or commit SHA
+    validations:
+      required: true
+
+  - type: input
+    id: windows_version
+    attributes:
+      label: Windows version / build
+      placeholder: e.g. Windows 11 24H2, build ...
+    validations:
+      required: true
+
+  - type: input
+    id: python_version
+    attributes:
+      label: Python version
+      placeholder: e.g. Python 3.13.x 64-bit
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependency_versions
+    attributes:
+      label: Dependency versions
+      placeholder: |
+        PySide6 = ...
+        cryptography = ...
+        argon2-cffi = ...
+        liboqs-python = ...
+        pip = ...
+        CMake = ...
+        Git = ...
+        Visual Studio Build Tools = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: pq_availability
+    attributes:
+      label: Post-Quantum algorithm availability
+      placeholder: |
+        ML-KEM-768 available = Yes / No / Unknown
+        ML-DSA-65 available = Yes / No / Unknown
+        Additional liboqs details = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: installation_steps
+    attributes:
+      label: Performed installation / startup steps
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+        4. Error occurs ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: Expected result
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_result
+    attributes:
+      label: Actual result
+      placeholder: What happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Console output / traceback
+      description: Remove secrets and sensitive local information before submitting.
+      render: shell
+      placeholder: Complete relevant error output or None available
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional environment details
+      placeholder: CPU architecture, virtual environment, installation method, PATH-related observations, or None available
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I followed the documented startup / installation procedure or described all deviations.
+          required: true
+        - label: I included the relevant environment and dependency versions.
+          required: true
+        - label: I removed passwords, private keys, tokens, and other confidential information.
+          required: true
+        - label: All required fields have been completed.
+          required: true

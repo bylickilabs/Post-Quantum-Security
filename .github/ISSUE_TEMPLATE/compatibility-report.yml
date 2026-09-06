@@ -1,0 +1,145 @@
+name: Compatibility Report
+description: Document a tested Post Quantum Security environment and its compatibility status.
+title: "[Compatibility] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🧪 Compatibility Report
+
+        Use this form to document a reproducible test of Post Quantum Security on a specific Windows / Python / dependency environment.
+
+        **All fields are required.** If a value is unknown, enter `Unknown`. If a field does not apply, enter `Not applicable`.
+
+  - type: dropdown
+    id: compatibility_status
+    attributes:
+      label: Compatibility status
+      options:
+        - Fully compatible
+        - Compatible with minor limitations
+        - Partially compatible
+        - Unstable
+        - Not compatible
+        - Application does not start
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Application version
+      placeholder: e.g. 1.1.0 or commit SHA
+    validations:
+      required: true
+
+  - type: input
+    id: windows_version
+    attributes:
+      label: Windows version / build
+      placeholder: e.g. Windows 11 24H2, build ...
+    validations:
+      required: true
+
+  - type: input
+    id: python_version
+    attributes:
+      label: Python version / architecture
+      placeholder: e.g. Python 3.13.x 64-bit
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependency_versions
+    attributes:
+      label: Dependency versions
+      placeholder: |
+        PySide6 = ...
+        cryptography = ...
+        argon2-cffi = ...
+        liboqs-python = ...
+        pip = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: pq_algorithms
+    attributes:
+      label: Post-Quantum algorithm availability
+      placeholder: |
+        ML-KEM-768 = Available / Unavailable / Unknown
+        ML-DSA-65 = Available / Unavailable / Unknown
+    validations:
+      required: true
+
+  - type: textarea
+    id: tested_features
+    attributes:
+      label: Tested features
+      placeholder: |
+        Application startup = ...
+        Text encryption / decryption = ...
+        File encryption / decryption = ...
+        ML-KEM key generation = ...
+        ML-DSA key generation = ...
+        Key Vault = ...
+        Signing / verification = ...
+        DE / EN language switching = ...
+    validations:
+      required: true
+
+  - type: input
+    id: test_duration
+    attributes:
+      label: Test duration
+      placeholder: e.g. 60 minutes, several sessions, multi-day use
+    validations:
+      required: true
+
+  - type: textarea
+    id: observed_behavior
+    attributes:
+      label: Observed behavior
+      placeholder: Describe stability, performance, startup behavior, and functional results.
+    validations:
+      required: true
+
+  - type: textarea
+    id: limitations
+    attributes:
+      label: Known limitations / deviations
+      placeholder: None known or a precise description
+    validations:
+      required: true
+
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Required workarounds
+      placeholder: None required or a precise description
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Additional evidence
+      description: Add non-sensitive logs, screenshots, or technical observations.
+      placeholder: Evidence or None available
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I tested this exact environment myself.
+          required: true
+        - label: The listed versions and results reflect the actual tested setup.
+          required: true
+        - label: I did not include passwords, private keys, shared secrets, or confidential data.
+          required: true
+        - label: All required fields have been completed.
+          required: true

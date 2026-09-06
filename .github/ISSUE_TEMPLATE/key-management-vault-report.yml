@@ -1,0 +1,149 @@
+name: Key Management / Key Vault Report
+description: Report issues involving ML-KEM / ML-DSA keys, key files, exports, loading, or the local SQLite Key Vault.
+title: "[Keys/Vault] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🔑 Key Management / Key Vault Report
+
+        Use this form for reproducible issues involving key generation, protected private-key storage, fingerprints, exports, loading, deletion, or the local SQLite Key Vault.
+
+        **Never publish private keys, passwords, shared secrets, database contents containing sensitive material, or confidential plaintext.**
+
+  - type: dropdown
+    id: affected_operation
+    attributes:
+      label: Affected operation
+      options:
+        - Generate ML-KEM-768 key pair
+        - Generate ML-DSA-65 key pair
+        - Save key pair to Key Vault
+        - Load key pair from Key Vault
+        - Export key pair
+        - Delete Key Vault entry
+        - Fingerprint generation
+        - Private-key password protection
+        - Other key-management operation
+    validations:
+      required: true
+
+  - type: dropdown
+    id: key_type
+    attributes:
+      label: Key type
+      options:
+        - ML-KEM-768
+        - ML-DSA-65
+        - Not applicable
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Application version
+      placeholder: e.g. 1.1.0 or commit SHA
+    validations:
+      required: true
+
+  - type: input
+    id: file_format
+    attributes:
+      label: Relevant key file format
+      placeholder: .qpub, .qkey, .qsigpub, .qsigkey, or Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Performed workflow
+      placeholder: |
+        1. Opened Key Management
+        2. Selected key type / Key Vault operation
+        3. ...
+        4. Result / error ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: Expected result
+      placeholder: What should have happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_result
+    attributes:
+      label: Actual result
+      placeholder: What happened instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: vault_involved
+    attributes:
+      label: SQLite Key Vault involved
+      options:
+        - Yes
+        - No
+        - Unknown
+    validations:
+      required: true
+
+  - type: textarea
+    id: vault_context
+    attributes:
+      label: Key Vault context
+      description: Do not paste private key data or sensitive database contents.
+      placeholder: Entry type, key name, operation, duplicate behavior, export/load behavior, or Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: |
+        Windows = ...
+        Python = ...
+        liboqs-python = ...
+        SQLite / local application data path behavior = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Error message / traceback
+      description: Remove all secrets before submitting.
+      render: shell
+      placeholder: Error output or None available
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_notes
+    attributes:
+      label: Additional observations / evidence
+      placeholder: Reproducibility, screenshots, non-sensitive logs, or None available
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I reproduced or directly observed the reported key-management behavior.
+          required: true
+        - label: I did not include passwords, private keys, shared secrets, or sensitive database contents.
+          required: true
+        - label: This is not a security-critical vulnerability requiring confidential disclosure.
+          required: true
+        - label: All required fields have been completed.
+          required: true

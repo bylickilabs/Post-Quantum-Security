@@ -1,0 +1,118 @@
+name: Documentation Issue
+description: Report missing, incorrect, outdated, or unclear project documentation.
+title: "[Documentation] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 📚 Documentation Issue
+
+        Use this form for problems in the README, installation instructions, usage documentation, technical descriptions, or version information.
+
+        **All fields are required.** If a field does not apply, enter `Not applicable`.
+
+  - type: dropdown
+    id: documentation_type
+    attributes:
+      label: Documentation issue type
+      options:
+        - Missing content
+        - Incorrect content
+        - Outdated content
+        - Unclear or ambiguous wording
+        - Installation documentation problem
+        - Usage documentation problem
+        - Technical documentation problem
+        - Broken link / reference
+        - Version inconsistency
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: affected_document
+    attributes:
+      label: Affected document / file
+      placeholder: e.g. README.md, installation section, issue form, or application information dialog
+    validations:
+      required: true
+
+  - type: input
+    id: affected_section
+    attributes:
+      label: Affected section
+      placeholder: Exact heading, section, link, table, or location
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_content
+    attributes:
+      label: Current content / state
+      placeholder: Describe the current wording, behavior, missing information, or incorrect reference.
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: Problem description
+      placeholder: Explain why the current documentation is incorrect, incomplete, outdated, or unclear.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_content
+    attributes:
+      label: Expected / corrected content
+      placeholder: Describe the correct information or desired documentation behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: verification_steps
+    attributes:
+      label: Verification steps / technical context
+      placeholder: How can the documentation problem be verified against the actual application or repository?
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Relevant application version
+      placeholder: e.g. 1.1.0, commit SHA, or Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_change
+    attributes:
+      label: Proposed change
+      placeholder: Describe the exact correction, addition, removal, or restructuring you recommend.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: References / evidence
+      description: Add links, screenshots, or non-sensitive technical evidence.
+      placeholder: References or None available
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I checked whether the same documentation issue has already been reported.
+          required: true
+        - label: I verified the affected documentation against the current application or repository where possible.
+          required: true
+        - label: I did not include confidential or security-sensitive information.
+          required: true
+        - label: All required fields have been completed.
+          required: true

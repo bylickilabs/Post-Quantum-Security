@@ -1,0 +1,148 @@
+name: Encryption / Decryption Report
+description: Report reproducible issues in text or file encryption and decryption workflows.
+title: "[Crypto] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🔐 Encryption / Decryption Report
+
+        Use this form for reproducible problems in the encryption and decryption workflows of Post Quantum Security.
+
+        **All fields are required. Never publish passwords, private keys, shared secrets, or confidential plaintext.**
+
+  - type: dropdown
+    id: operation
+    attributes:
+      label: Affected operation
+      options:
+        - Encrypt text
+        - Decrypt text
+        - Encrypt file
+        - Decrypt file
+    validations:
+      required: true
+
+  - type: dropdown
+    id: crypto_mode
+    attributes:
+      label: Cryptographic mode
+      options:
+        - Password mode / Argon2id + AES-256-GCM
+        - Post-Quantum mode / ML-KEM-768 + HKDF-SHA-256 + AES-256-GCM
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Application version
+      placeholder: e.g. 1.1.0 or commit SHA
+    validations:
+      required: true
+
+  - type: input
+    id: input_type
+    attributes:
+      label: Input type / file format
+      description: For files, provide the file type and approximate size. Do not upload confidential content.
+      placeholder: e.g. TXT, PDF, PNG, 25 MB, or QSEC1 text container
+    validations:
+      required: true
+
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Performed workflow
+      description: Describe the complete sequence up to the failure.
+      placeholder: |
+        1. Selected mode
+        2. Selected input
+        3. Selected password / public key / private key
+        4. Started operation
+        5. Result / error ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: Expected result
+      placeholder: What should have been created or successfully decrypted?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_result
+    attributes:
+      label: Actual result
+      placeholder: What happened instead?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: qsec_container
+    attributes:
+      label: QSEC container involved
+      options:
+        - Yes, .qsec file
+        - Yes, QSEC1 text container
+        - No
+        - Unknown
+    validations:
+      required: true
+
+  - type: input
+    id: key_algorithm
+    attributes:
+      label: Key / algorithm used
+      description: Do not include actual key material.
+      placeholder: e.g. ML-KEM-768 public key, ML-KEM-768 private key, or Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: |
+        Windows = ...
+        Python = ...
+        cryptography = ...
+        argon2-cffi = ...
+        liboqs-python = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Error message / traceback
+      description: Remove secrets and confidential data before submitting.
+      render: shell
+      placeholder: Error output or None available
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducibility_notes
+    attributes:
+      label: Reproducibility / additional observations
+      placeholder: Does the issue also occur with other files, keys, or after restarting the application?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I reproduced the described workflow myself.
+          required: true
+        - label: I did not publish passwords, private keys, shared secrets, or confidential plaintext.
+          required: true
+        - label: This is not a security-critical vulnerability that should be disclosed confidentially.
+          required: true
+        - label: All required fields have been completed.
+          required: true

@@ -1,0 +1,134 @@
+name: Feature Request
+description: Propose a new feature, workflow, compatibility improvement, or technical extension.
+title: "[Feature] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🚀 Feature Request
+
+        Use this form to propose a clearly scoped improvement to Post Quantum Security.
+
+        **All fields are required.** Do not include confidential information or security-sensitive implementation details that should be disclosed privately.
+
+  - type: dropdown
+    id: feature_category
+    attributes:
+      label: Feature category
+      options:
+        - Encryption / decryption
+        - Post-Quantum cryptography
+        - Key management / Key Vault
+        - Digital signatures / verification
+        - QSEC container workflow
+        - User interface / usability
+        - Installation / environment support
+        - Documentation
+        - Testing / quality assurance
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature_summary
+    attributes:
+      label: Feature summary
+      description: Describe what should be added, changed, or improved.
+      placeholder: What should the application do differently or additionally?
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem_use_case
+    attributes:
+      label: Problem / use case
+      description: Explain the concrete problem or workflow the proposal addresses.
+      placeholder: What limitation exists today and when does it matter?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed solution
+      placeholder: Describe the desired technical or functional implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_workflow
+    attributes:
+      label: Expected workflow
+      placeholder: |
+        1. User opens ...
+        2. User selects ...
+        3. Application performs ...
+        4. Result ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_benefit
+    attributes:
+      label: Expected benefit
+      placeholder: What practical, security, usability, compatibility, or maintenance benefit would this provide?
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected_components
+    attributes:
+      label: Affected components
+      placeholder: e.g. GUI, crypto/core.py, pq.py, keys.py, signatures.py, database.py, installer, documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: compatibility_impact
+    attributes:
+      label: Compatibility / migration impact
+      placeholder: Describe possible effects on existing QSEC files, key files, database entries, settings, or dependencies. Enter None known if none are expected.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: Existing workaround, alternative design, or None known
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - The feature behaves as described.
+        - Existing supported workflows continue to work.
+        - Relevant tests pass.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      placeholder: References, mockups, non-sensitive technical notes, or None available
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      options:
+        - label: I checked whether a comparable feature request already exists.
+          required: true
+        - label: I described the proposal and expected benefit as concretely as possible.
+          required: true
+        - label: I did not include confidential or security-sensitive information that requires private disclosure.
+          required: true
+        - label: All required fields have been completed.
+          required: true
