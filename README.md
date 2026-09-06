@@ -9,6 +9,9 @@
 ![Post Quantum](https://img.shields.io/badge/Post--Quantum-ML--KEM--768_%7C_ML--DSA--65-6f42c1)
 ![Status](https://img.shields.io/badge/Development-Completed-success)
 
+| <img width="1280" height="640" alt="PQS" src="https://github.com/user-attachments/assets/4e17ea71-5ba9-44a0-9ec0-e696733e7a44" /> |
+|---|
+
 > [!NOTE]
 > **Deutsch:** Post Quantum Security ist eine lokal arbeitende Desktopanwendung mit:
   - klassischer Kryptografie
@@ -27,9 +30,6 @@
   - a local key vault
   - a project-specific QSEC container format
   - one unified local security workflow
-
-| <img width="1280" height="640" alt="PQS" src="https://github.com/user-attachments/assets/4e17ea71-5ba9-44a0-9ec0-e696733e7a44" /> |
-|---|
 
 <br>
 
