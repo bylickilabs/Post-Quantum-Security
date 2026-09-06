@@ -1,5 +1,14 @@
 # Post Quantum Security [![PQS Security & Crypto CI](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/security-ci.yml/badge.svg)](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/security-ci.yml)
 
+<!-- DEPENDENCY-GRAPH-SNAPSHOT:START -->
+## Dependency Graph Snapshot — pip
+
+| Directory | Status | Details |
+| --- | --- | --- |
+| `/` | ✅ Ok | Found 4 dependencies |
+<!-- DEPENDENCY-GRAPH-SNAPSHOT:END -->
+
+
 
 
 | Lokale Desktopanwendung für klassische Kryptografie und standardisierte Post-Quantum-Verfahren| 
