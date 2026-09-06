@@ -1,5 +1,5 @@
 name: Documentation Issue
-description: Melde fehlende, fehlerhafte, veraltete oder unklare Dokumentation zu Post Quantum Security.
+description: Report missing, incorrect, outdated, or unclear project documentation.
 title: "[Documentation] "
 labels: []
 body:
@@ -8,116 +8,111 @@ body:
       value: |
         # 📚 Documentation Issue
 
-        Verwende dieses Formular für Fehler, Unklarheiten oder fehlende Inhalte in README, Installationshinweisen oder technischer Dokumentation.
+        Use this form for problems in the README, installation instructions, usage documentation, technical descriptions, or version information.
 
-        **Alle Angaben sind verpflichtend.** Falls ein Punkt nicht zutrifft, trage `Nicht zutreffend` ein.
+        **All fields are required.** If a field does not apply, enter `Not applicable`.
 
   - type: dropdown
     id: documentation_type
     attributes:
-      label: Art des Dokumentationsproblems
+      label: Documentation issue type
       options:
-        - Fehlender Inhalt
-        - Fehlerhafter Inhalt
-        - Veralteter Inhalt
-        - Unklare oder missverständliche Formulierung
-        - Fehlerhafte Installationsanleitung
-        - Unvollständige Installationsanleitung
-        - Fehlerhafte technische Dokumentation
-        - Unvollständige technische Dokumentation
-        - Falscher Link oder Verweis
-        - Versionsangabe inkonsistent
-        - Sonstiges Dokumentationsproblem
+        - Missing content
+        - Incorrect content
+        - Outdated content
+        - Unclear or ambiguous wording
+        - Installation documentation problem
+        - Usage documentation problem
+        - Technical documentation problem
+        - Broken link / reference
+        - Version inconsistency
+        - Other
     validations:
       required: true
 
   - type: input
     id: affected_document
     attributes:
-      label: Betroffene Datei / Dokumentation
-      placeholder: z. B. README.md, install-windows.ps1, requirements.txt
+      label: Affected document / file
+      placeholder: e.g. README.md, installation section, issue form, or application information dialog
     validations:
       required: true
 
   - type: input
     id: affected_section
     attributes:
-      label: Betroffener Abschnitt
-      placeholder: z. B. Installation, Kryptografische Architektur, Sicherheit, Entwicklungsstatus
+      label: Affected section
+      placeholder: Exact heading, section, link, table, or location
     validations:
       required: true
 
   - type: textarea
     id: current_content
     attributes:
-      label: Aktueller Inhalt / Zustand
-      placeholder: Welcher Inhalt ist aktuell vorhanden oder was fehlt?
+      label: Current content / state
+      placeholder: Describe the current wording, behavior, missing information, or incorrect reference.
     validations:
       required: true
 
   - type: textarea
     id: issue_description
     attributes:
-      label: Beschreibung des Problems
-      placeholder: Warum ist der aktuelle Inhalt falsch, unklar, veraltet oder unvollständig?
+      label: Problem description
+      placeholder: Explain why the current documentation is incorrect, incomplete, outdated, or unclear.
     validations:
       required: true
 
   - type: textarea
     id: expected_content
     attributes:
-      label: Erwarteter / korrekter Inhalt
-      placeholder: Welche Information oder Formulierung wäre korrekt?
+      label: Expected / corrected content
+      placeholder: Describe the correct information or desired documentation behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: verification_steps
+    attributes:
+      label: Verification steps / technical context
+      placeholder: How can the documentation problem be verified against the actual application or repository?
     validations:
       required: true
 
   - type: input
     id: app_version
     attributes:
-      label: Betroffene Anwendungsversion
-      placeholder: z. B. 1.1.0, Commit-SHA oder Nicht zutreffend
-    validations:
-      required: true
-
-  - type: textarea
-    id: verification_context
-    attributes:
-      label: Kontext / Schritte zur Überprüfung
-      placeholder: |
-        1. Öffne ...
-        2. Navigiere zu ...
-        3. Vergleiche mit ...
-        4. Abweichung wird sichtbar
-    validations:
-      required: true
-
-  - type: textarea
-    id: technical_reference
-    attributes:
-      label: Technische Referenz / Nachweise
-      description: Keine Passwörter, privaten Schlüssel oder vertraulichen Daten veröffentlichen.
-      placeholder: Code-Stelle, Log, Screenshot, offizielle Referenz oder Keine vorhanden
+      label: Relevant application version
+      placeholder: e.g. 1.1.0, commit SHA, or Not applicable
     validations:
       required: true
 
   - type: textarea
     id: proposed_change
     attributes:
-      label: Konkreter Änderungsvorschlag
-      placeholder: Welche Passage sollte ergänzt, ersetzt, entfernt oder neu strukturiert werden?
+      label: Proposed change
+      placeholder: Describe the exact correction, addition, removal, or restructuring you recommend.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: References / evidence
+      description: Add links, screenshots, or non-sensitive technical evidence.
+      placeholder: References or None available
     validations:
       required: true
 
   - type: checkboxes
     id: confirmation
     attributes:
-      label: Bestätigung
+      label: Confirmation
       options:
-        - label: Ich habe geprüft, ob das Dokumentationsproblem bereits als Issue existiert.
+        - label: I checked whether the same documentation issue has already been reported.
           required: true
-        - label: Ich habe die betroffene Dokumentation selbst geprüft.
+        - label: I verified the affected documentation against the current application or repository where possible.
           required: true
-        - label: Meine Angaben enthalten keine Passwörter, privaten Schlüssel oder andere vertrauliche Informationen.
+        - label: I did not include confidential or security-sensitive information.
           required: true
-        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+        - label: All required fields have been completed.
           required: true
