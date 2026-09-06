@@ -1,0 +1,140 @@
+name: Signature / Verification Report
+description: Dokumentiere Probleme bei ML-DSA-65-Signaturen und deren Verifikation.
+title: "[Signature] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # ✍️ Signature / Verification Report
+
+        Verwende dieses Formular für reproduzierbare Probleme beim Signieren oder Verifizieren von Dateien mit ML-DSA-65.
+
+        **Veröffentliche niemals private Signaturschlüssel, Passwörter oder andere vertrauliche Informationen.**
+
+  - type: dropdown
+    id: operation
+    attributes:
+      label: Betroffener Vorgang
+      options:
+        - Datei signieren
+        - Signatur verifizieren
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Anwendungsversion
+      placeholder: z. B. 1.1.0 oder Commit-SHA
+    validations:
+      required: true
+
+  - type: input
+    id: signature_format
+    attributes:
+      label: Signaturformat
+      placeholder: z. B. .qsig
+    validations:
+      required: true
+
+  - type: input
+    id: file_type
+    attributes:
+      label: Signierte / verifizierte Datei
+      description: Gib nur Typ und ungefähre Größe an, keine vertraulichen Inhalte.
+      placeholder: z. B. PDF, 5 MB
+    validations:
+      required: true
+
+  - type: input
+    id: key_type
+    attributes:
+      label: Verwendeter Schlüsseltyp
+      placeholder: z. B. ML-DSA-65 Private Key oder ML-DSA-65 Public Key
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Schritte zur Reproduktion
+      placeholder: |
+        1. Datei auswählen
+        2. Schlüssel auswählen
+        3. Signieren / Verifizieren
+        4. Ergebnis ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Erwartetes Verhalten
+      placeholder: Erwartet wurde ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Tatsächliches Verhalten
+      placeholder: Tatsächlich passiert ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: verification_result
+    attributes:
+      label: Verifikationsergebnis
+      options:
+        - Signatur gültig
+        - Signatur ungültig
+        - Verifikation schlägt mit Fehler fehl
+        - Nicht zutreffend
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Umgebung
+      placeholder: |
+        Windows = ...
+        Python = ...
+        liboqs-python = ...
+        liboqs / OQS = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Fehlermeldung / Traceback
+      description: Entferne Passwörter, private Schlüssel und vertrauliche Daten.
+      render: shell
+      placeholder: Fehlermeldung oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_notes
+    attributes:
+      label: Zusätzliche Beobachtungen
+      placeholder: z. B. Verhalten nach Dateiveränderung, mit anderem Schlüsselpaar oder nach Neustart
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      options:
+        - label: Ich habe keine privaten Schlüssel, Passwörter oder vertraulichen Nutzdaten veröffentlicht.
+          required: true
+        - label: Ich habe den beschriebenen Signatur- oder Verifikationsvorgang selbst reproduziert.
+          required: true
+        - label: Es handelt sich nicht um eine vertraulich zu meldende sicherheitskritische Schwachstelle.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+          required: true
