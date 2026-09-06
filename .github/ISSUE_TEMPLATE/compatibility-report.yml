@@ -1,0 +1,161 @@
+name: Compatibility Report
+description: Dokumentiere eine erfolgreich oder eingeschränkt getestete System- und Softwarekombination für Post Quantum Security.
+title: "[Compatibility] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🧪 Compatibility Report
+
+        Verwende dieses Formular, um eine konkret getestete Umgebung von Post Quantum Security reproduzierbar zu dokumentieren.
+
+        Ziel ist eine belastbare Übersicht über funktionierende und eingeschränkt funktionierende Kombinationen aus Windows, Python, liboqs und den relevanten Python-Abhängigkeiten.
+
+        **Alle Angaben sind verpflichtend.** Keine Passwörter, privaten Schlüssel oder andere vertrauliche Daten veröffentlichen.
+
+  - type: dropdown
+    id: compatibility_status
+    attributes:
+      label: Kompatibilitätsstatus
+      options:
+        - Vollständig kompatibel
+        - Kompatibel mit kleineren Einschränkungen
+        - Eingeschränkt kompatibel
+        - Instabil
+        - Nicht kompatibel
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: Anwendungsversion
+      placeholder: z. B. 1.1.0 oder Commit-SHA
+    validations:
+      required: true
+
+  - type: input
+    id: windows_version
+    attributes:
+      label: Windows-Version / Build
+      placeholder: z. B. Windows 11 Pro 24H2, Build ...
+    validations:
+      required: true
+
+  - type: input
+    id: architecture
+    attributes:
+      label: Systemarchitektur
+      placeholder: z. B. x64
+    validations:
+      required: true
+
+  - type: input
+    id: python_version
+    attributes:
+      label: Python-Version
+      placeholder: z. B. Python 3.13.x
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependency_versions
+    attributes:
+      label: Getestete Abhängigkeiten
+      placeholder: |
+        PySide6 = ...
+        cryptography = ...
+        argon2-cffi = ...
+        liboqs-python = ...
+        liboqs / OQS = ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install_result
+    attributes:
+      label: Installation
+      options:
+        - Erfolgreich
+        - Erfolgreich mit manuellen Anpassungen
+        - Fehlgeschlagen
+        - Nicht getestet
+    validations:
+      required: true
+
+  - type: dropdown
+    id: startup_result
+    attributes:
+      label: Anwendungsstart
+      options:
+        - Erfolgreich
+        - Erfolgreich mit Einschränkungen
+        - Fehlgeschlagen
+    validations:
+      required: true
+
+  - type: textarea
+    id: tested_functions
+    attributes:
+      label: Getestete Funktionen
+      placeholder: |
+        Text Passwortmodus = ...
+        Text Post-Quantum-Modus = ...
+        Datei Passwortmodus = ...
+        Datei Post-Quantum-Modus = ...
+        ML-KEM-Schlüsselgenerierung = ...
+        ML-DSA-Schlüsselgenerierung = ...
+        Signieren = ...
+        Verifizieren = ...
+        SQLite Key Vault = ...
+        DE / EN = ...
+    validations:
+      required: true
+
+  - type: input
+    id: test_duration
+    attributes:
+      label: Testdauer
+      placeholder: z. B. 2 Stunden, mehrere Starts, vollständiger Funktionstest
+    validations:
+      required: true
+
+  - type: textarea
+    id: limitations
+    attributes:
+      label: Bekannte Einschränkungen / Abweichungen
+      placeholder: Keine bekannt oder genaue Beschreibung
+    validations:
+      required: true
+
+  - type: textarea
+    id: required_workarounds
+    attributes:
+      label: Erforderliche Anpassungen / Workarounds
+      placeholder: Keine erforderlich oder genaue Beschreibung
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Zusätzliche Nachweise / Beobachtungen
+      description: Keine vertraulichen Daten veröffentlichen.
+      placeholder: Logs, Screenshots, Hinweise oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      options:
+        - label: Ich habe die angegebene Kombination selbst getestet.
+          required: true
+        - label: Die angegebenen Versionen und Testergebnisse entsprechen der tatsächlich verwendeten Umgebung.
+          required: true
+        - label: Ich habe keine Passwörter, privaten Schlüssel oder andere vertrauliche Daten veröffentlicht.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig ausgefüllt.
+          required: true
