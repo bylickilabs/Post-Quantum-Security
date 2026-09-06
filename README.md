@@ -1,4 +1,6 @@
-# Post Quantum Security
+# Post Quantum Security [![PQS Security & Crypto CI](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/security-ci.yml/badge.svg)](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/security-ci.yml)
+
+
 
 | Lokale Desktopanwendung für klassische Kryptografie und standardisierte Post-Quantum-Verfahren| 
 |---|
