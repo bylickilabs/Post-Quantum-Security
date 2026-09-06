@@ -1,0 +1,140 @@
+name: PQS Windows Release Package
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Build Verified Release Package
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Resolve application version
+        id: version
+        shell: pwsh
+        run: |
+          $content = Get-Content "app/constants.py" -Raw
+          $match = [regex]::Match($content, 'APP_VERSION\s*=\s*"([^"]+)"')
+          if (-not $match.Success) {
+            throw "APP_VERSION could not be determined from app/constants.py."
+          }
+          $version = $match.Groups[1].Value
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "Application version: $version"
+
+          if ($env:GITHUB_REF_TYPE -eq "tag") {
+            $expectedTag = "v$version"
+            if ($env:GITHUB_REF_NAME -ne $expectedTag) {
+              throw "Release tag '$env:GITHUB_REF_NAME' does not match APP_VERSION '$expectedTag'."
+            }
+          }
+
+      - name: Verify release source tree
+        shell: pwsh
+        run: |
+          $required = @(
+            "README.md",
+            "main.py",
+            "requirements.txt",
+            "app",
+            "crypto",
+            "gui",
+            "install-windows.ps1",
+            "run_windows.bat"
+          )
+          foreach ($path in $required) {
+            if (-not (Test-Path $path)) {
+              throw "Required release path is missing: $path"
+            }
+          }
+
+      - name: Reject sensitive tracked files
+        shell: pwsh
+        run: |
+          $tracked = git ls-files
+          $forbidden = $tracked | Where-Object {
+            $_ -match '(^|/)\.env($|\.)' -or
+            $_ -match '\.(qkey|qsigkey|pem|p12|pfx|sqlite|sqlite3|db)$'
+          }
+          if ($forbidden) {
+            $forbidden | ForEach-Object { Write-Error "Forbidden release file: $_" }
+            throw "Sensitive files are tracked and release packaging has been blocked."
+          }
+
+      - name: Create release package
+        id: package
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $root = "release"
+          $packageDir = Join-Path $root "Post-Quantum-Security-v$version"
+          New-Item -ItemType Directory -Force -Path $packageDir | Out-Null
+
+          Copy-Item "README.md" $packageDir
+          Copy-Item "requirements.txt" $packageDir
+          Copy-Item "main.py" $packageDir
+          Copy-Item "install-windows.ps1" $packageDir
+          Copy-Item "run_windows.bat" $packageDir
+          if (Test-Path ".gitignore") { Copy-Item ".gitignore" $packageDir }
+          if (Test-Path "LICENSE") { Copy-Item "LICENSE" $packageDir }
+          if (Test-Path "PQS.png") { Copy-Item "PQS.png" $packageDir }
+
+          Copy-Item "app" $packageDir -Recurse
+          Copy-Item "crypto" $packageDir -Recurse
+          Copy-Item "gui" $packageDir -Recurse
+
+          $zip = Join-Path $root "Post-Quantum-Security-v$version.zip"
+          Compress-Archive -Path "$packageDir\*" -DestinationPath $zip -CompressionLevel Optimal
+
+          $hash = (Get-FileHash -Path $zip -Algorithm SHA256).Hash.ToLower()
+          $shaFile = "$zip.sha256"
+          "$hash  $(Split-Path $zip -Leaf)" | Set-Content -Path $shaFile -Encoding ascii
+
+          "zip=$zip" >> $env:GITHUB_OUTPUT
+          "sha=$shaFile" >> $env:GITHUB_OUTPUT
+          "sha256=$hash" >> $env:GITHUB_OUTPUT
+
+      - name: Upload verified release artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Post-Quantum-Security-v${{ steps.version.outputs.version }}
+          path: |
+            ${{ steps.package.outputs.zip }}
+            ${{ steps.package.outputs.sha }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Create GitHub Release for version tag
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" `
+            "${{ steps.package.outputs.zip }}" `
+            "${{ steps.package.outputs.sha }}" `
+            --title "Post Quantum Security ${{ github.ref_name }}" `
+            --generate-notes
+
+      - name: Write release summary
+        shell: pwsh
+        run: |
+          @"
+          ## PQS Windows Release Package
+
+          - Version: `${{ steps.version.outputs.version }}`
+          - Package: `${{ steps.package.outputs.zip }}`
+          - SHA-256: `${{ steps.package.outputs.sha256 }}`
+          - Sensitive tracked files: blocked
+          - Tag/version consistency: enforced for tagged releases
+          "@ >> $env:GITHUB_STEP_SUMMARY
