@@ -1,4 +1,13 @@
+| <img width="1280" height="640" alt="PQS" src="https://github.com/user-attachments/assets/4e17ea71-5ba9-44a0-9ec0-e696733e7a44" /> |
+|---|
+
 # Post Quantum Security [![PQS Security & Crypto CI](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/security-ci.yml/badge.svg)](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/security-ci.yml)
+
+| Lokale Desktopanwendung für klassische Kryptografie und standardisierte Post-Quantum-Verfahren| 
+|---|
+
+| [⬇ Download Post Quantum Security v1.0.0](https://github.com/bylickilabs/Post-Quantum-Security/releases/download/v1.0.0/Post-Quantum-Security-v1.0.0.zip) | [⬇ Latest Release](https://github.com/bylickilabs/Post-Quantum-Security/releases/latest) |
+|---|---|
 
 <!-- DEPENDENCY-GRAPH-SNAPSHOT:START -->
 ## Dependency Graph Snapshot — pip
@@ -8,17 +17,8 @@
 | `/` | ✅ Ok | Found 4 dependencies |
 <!-- DEPENDENCY-GRAPH-SNAPSHOT:END -->
 
-
-
-
-| Lokale Desktopanwendung für klassische Kryptografie und standardisierte Post-Quantum-Verfahren| 
-|---|
-
 | ![Python](https://img.shields.io/badge/Python-Desktop_Application-3776AB?logo=python&logoColor=white) | ![PySide6](https://img.shields.io/badge/GUI-PySide6-41CD52?logo=qt&logoColor=white) | ![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white) | ![Post Quantum](https://img.shields.io/badge/Post--Quantum-ML--KEM--768_%7C_ML--DSA--65-6f42c1) | ![Status](https://img.shields.io/badge/Development-Completed-success) |
 |---|---|---|---|---|
-
-| <img width="1280" height="640" alt="PQS" src="https://github.com/user-attachments/assets/4e17ea71-5ba9-44a0-9ec0-e696733e7a44" /> |
-|---|
 
 > [!NOTE]
 > **Deutsch:** Post Quantum Security ist eine lokal arbeitende Desktopanwendung mit:
