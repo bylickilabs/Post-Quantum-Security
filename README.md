@@ -14,7 +14,6 @@
 |---|---|
 <!-- WINDOWS-EXE-RELEASE:END -->
 
-
 <!-- DEPENDENCY-GRAPH-SNAPSHOT:START -->
 ## Dependency Graph Snapshot — pip
 
