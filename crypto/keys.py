@@ -11,10 +11,10 @@ KEY_AAD = b"QSEC-PRIVATE-KEY-V1"
 KeyPayload = dict[str, object]
 
 
-def _file_encryption_key() -> bytes:
+def _legacy_file_encryption_key() -> bytes:
     key_b64 = os.environ.get("QSEC_FILE_KEY", "")
     if not key_b64:
-        raise ValueError("Missing QSEC_FILE_KEY for private key file encryption.")
+        raise ValueError("Missing QSEC_FILE_KEY required to read this legacy encrypted key file.")
     key = b64d(key_b64)
     if len(key) != 32:
         raise ValueError("QSEC_FILE_KEY must decode to 32 bytes.")
@@ -22,19 +22,8 @@ def _file_encryption_key() -> bytes:
 
 
 def _write_json(path: Path, payload: Mapping[str, object]) -> None:
-    serialized = json.dumps(payload, indent=2, ensure_ascii=False).encode("utf-8")
-    if path.suffix in {".qkey", ".qsigkey"}:
-        file_key = _file_encryption_key()
-        nonce, ciphertext = aes_encrypt(file_key, serialized, KEY_AAD)
-        envelope = {
-            "format": "QSEC-ENCRYPTED-FILE",
-            "version": 1,
-            "nonce": b64e(nonce),
-            "ciphertext": b64e(ciphertext),
-        }
-        path.write_text(json.dumps(envelope, indent=2, ensure_ascii=False), encoding="utf-8")
-        return
-    path.write_text(serialized.decode("utf-8"), encoding="utf-8")
+    serialized = json.dumps(payload, indent=2, ensure_ascii=False)
+    path.write_text(serialized, encoding="utf-8")
 
 
 def _read_json(path: str | Path) -> KeyPayload:
@@ -45,7 +34,7 @@ def _read_json(path: str | Path) -> KeyPayload:
     if raw.get("format") == "QSEC-ENCRYPTED-FILE" and raw.get("version") == 1:
         nonce = b64d(_require_str(cast(Mapping[str, object], raw), "nonce"))
         ciphertext = b64d(_require_str(cast(Mapping[str, object], raw), "ciphertext"))
-        file_key = _file_encryption_key()
+        file_key = _legacy_file_encryption_key()
         plaintext = aes_decrypt(file_key, nonce, ciphertext, KEY_AAD)
         inner: object = json.loads(plaintext.decode("utf-8"))
         if not isinstance(inner, dict):
