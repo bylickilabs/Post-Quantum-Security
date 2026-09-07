@@ -178,6 +178,11 @@ jobs:
           $version = "${{ steps.release.outputs.version }}"
           $name = "Post-Quantum-Security-v$version"
           $oqsDll = "${{ steps.liboqs.outputs.dll }}"
+          $runtimeHook = Join-Path $env:GITHUB_WORKSPACE "repository\.github\scripts\pyinstaller_oqs_runtime.py"
+
+          if (-not (Test-Path $runtimeHook)) {
+            throw "PyInstaller runtime hook not found: $runtimeHook"
+          }
 
           python -m PyInstaller `
             --noconfirm `
@@ -185,12 +190,16 @@ jobs:
             --onefile `
             --windowed `
             --name $name `
-            --runtime-hook ".github/scripts/pyinstaller_oqs_runtime.py" `
+            --runtime-hook "$runtimeHook" `
             --hidden-import oqs `
             --collect-submodules oqs `
             --copy-metadata liboqs-python `
             --add-binary "$oqsDll;oqs-runtime/bin" `
             main.py
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "PyInstaller failed with exit code $LASTEXITCODE."
+          }
 
           $exe = Join-Path "dist" "$name.exe"
           if (-not (Test-Path $exe)) {
