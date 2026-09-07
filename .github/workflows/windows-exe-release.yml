@@ -1,0 +1,291 @@
+name: PQS Windows EXE Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/windows-exe-release.yml
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to build, for example v1.0.0. Leave empty for latest release."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pqs-windows-exe-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-exe:
+    name: Build and Publish Windows EXE
+    runs-on: windows-latest
+
+    steps:
+      - name: Resolve target release
+        id: release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          if ($env:GITHUB_REF_TYPE -eq "tag") {
+            $tag = $env:GITHUB_REF_NAME
+          } elseif ($env:INPUT_TAG) {
+            $tag = $env:INPUT_TAG.Trim()
+          } else {
+            $tag = gh release view --repo $env:GH_REPO --json tagName --jq ".tagName"
+          }
+
+          if (-not $tag) {
+            throw "No release tag could be resolved."
+          }
+          if ($tag -notmatch '^v[0-9]+\.[0-9]+\.[0-9]+$') {
+            throw "Unsupported release tag format: $tag"
+          }
+
+          $version = $tag.Substring(1)
+          "tag=$tag" >> $env:GITHUB_OUTPUT
+          "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "Target release: $tag"
+
+      - name: Wait for GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          $deadline = (Get-Date).AddMinutes(10)
+          do {
+            gh release view $env:RELEASE_TAG --repo $env:GH_REPO --json tagName *> $null
+            if ($LASTEXITCODE -eq 0) {
+              Write-Host "Release $env:RELEASE_TAG is available."
+              exit 0
+            }
+            Start-Sleep -Seconds 5
+          } while ((Get-Date) -lt $deadline)
+
+          throw "Release $env:RELEASE_TAG was not available within the expected time window."
+
+      - name: Checkout release source
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.release.outputs.tag }}
+          path: source
+          fetch-depth: 0
+
+      - name: Checkout main for README update
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          path: repository
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: source/requirements.txt
+
+      - name: Install application and build dependencies
+        shell: pwsh
+        working-directory: source
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pyinstaller
+
+      - name: Build minimal liboqs runtime
+        id: liboqs
+        shell: pwsh
+        working-directory: source
+        run: |
+          $oqsVersion = python -c "import importlib.metadata; print(importlib.metadata.version('liboqs-python'))"
+          $oqsVersion = $oqsVersion.Trim()
+          if (-not $oqsVersion) {
+            throw "Could not determine liboqs-python version."
+          }
+
+          $buildRoot = Join-Path $env:GITHUB_WORKSPACE "oqs-build"
+          $sourceDir = Join-Path $buildRoot "liboqs"
+          $installDir = Join-Path $buildRoot "install"
+
+          New-Item -ItemType Directory -Force -Path $buildRoot | Out-Null
+          git clone --depth 1 --branch $oqsVersion https://github.com/open-quantum-safe/liboqs.git $sourceDir
+
+          cmake -S $sourceDir -B "$sourceDir\build" `
+            -DCMAKE_INSTALL_PREFIX="$installDir" `
+            -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE `
+            -DBUILD_SHARED_LIBS=ON `
+            -DOQS_BUILD_ONLY_LIB=ON `
+            -DOQS_USE_OPENSSL=OFF `
+            '-DOQS_MINIMAL_BUILD=KEM_ml_kem_768;SIG_ml_dsa_65'
+
+          cmake --build "$sourceDir\build" --config Release --parallel 4
+          cmake --install "$sourceDir\build" --config Release
+
+          $oqsDll = Join-Path $installDir "bin\oqs.dll"
+          if (-not (Test-Path $oqsDll)) {
+            throw "Compiled oqs.dll was not found at $oqsDll"
+          }
+
+          "install=$installDir" >> $env:GITHUB_OUTPUT
+          "dll=$oqsDll" >> $env:GITHUB_OUTPUT
+          "OQS_INSTALL_PATH=$installDir" >> $env:GITHUB_ENV
+          "$installDir\bin" >> $env:GITHUB_PATH
+
+      - name: Validate embedded post-quantum runtime
+        shell: pwsh
+        working-directory: source
+        run: |
+          python -c "import oqs; assert 'ML-KEM-768' in oqs.get_enabled_kem_mechanisms(); assert 'ML-DSA-65' in oqs.get_enabled_sig_mechanisms(); print('liboqs runtime validation passed.')"
+
+      - name: Compile Windows executable
+        id: exe
+        shell: pwsh
+        working-directory: source
+        run: |
+          $version = "${{ steps.release.outputs.version }}"
+          $name = "Post-Quantum-Security-v$version"
+          $oqsDll = "${{ steps.liboqs.outputs.dll }}"
+
+          python -m PyInstaller `
+            --noconfirm `
+            --clean `
+            --onefile `
+            --windowed `
+            --name $name `
+            --runtime-hook ".github/scripts/pyinstaller_oqs_runtime.py" `
+            --hidden-import oqs `
+            --collect-submodules oqs `
+            --copy-metadata liboqs-python `
+            --add-binary "$oqsDll;oqs-runtime/bin" `
+            main.py
+
+          $exe = Join-Path "dist" "$name.exe"
+          if (-not (Test-Path $exe)) {
+            throw "Expected executable was not generated: $exe"
+          }
+
+          $bytes = [System.IO.File]::ReadAllBytes((Resolve-Path $exe))
+          if ($bytes.Length -lt 2 -or $bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) {
+            throw "Generated file is not a valid Windows PE executable."
+          }
+
+          $hash = (Get-FileHash -Path $exe -Algorithm SHA256).Hash.ToLower()
+          $shaFile = "$exe.sha256"
+          "$hash  $name.exe" | Set-Content -Path $shaFile -Encoding ascii
+
+          "path=$exe" >> $env:GITHUB_OUTPUT
+          "sha=$shaFile" >> $env:GITHUB_OUTPUT
+          "sha256=$hash" >> $env:GITHUB_OUTPUT
+          "name=$name.exe" >> $env:GITHUB_OUTPUT
+
+      - name: Upload Windows EXE artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Post-Quantum-Security-Windows-EXE-v${{ steps.release.outputs.version }}
+          path: |
+            source/${{ steps.exe.outputs.path }}
+            source/${{ steps.exe.outputs.sha }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload EXE to GitHub Release
+        shell: pwsh
+        working-directory: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          gh release upload $env:RELEASE_TAG `
+            "${{ steps.exe.outputs.path }}" `
+            "${{ steps.exe.outputs.sha }}" `
+            --clobber `
+            --repo $env:GH_REPO
+
+      - name: Update README Windows EXE download
+        shell: pwsh
+        working-directory: repository
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          git pull --rebase origin main
+
+          python -c @'
+          import os
+          from pathlib import Path
+
+          path = Path("README.md")
+          text = path.read_text(encoding="utf-8")
+          version = os.environ["VERSION"]
+          tag = os.environ["RELEASE_TAG"]
+          repository = os.environ["REPOSITORY"]
+          start = "<!-- WINDOWS-EXE-RELEASE:START -->"
+          end = "<!-- WINDOWS-EXE-RELEASE:END -->"
+          block = "\n".join([
+              start,
+              f"| [⬇ Download Post Quantum Security v{version} (.exe)](https://github.com/{repository}/releases/download/{tag}/Post-Quantum-Security-v{version}.exe) | [⬇ Latest Release](https://github.com/{repository}/releases/latest) |",
+              "|---|---|",
+              end,
+          ])
+
+          if start in text and end in text:
+              before = text.split(start, 1)[0].rstrip()
+              after = text.split(end, 1)[1].lstrip()
+              updated = f"{before}\n\n{block}\n\n{after}"
+          else:
+              lines = text.splitlines()
+              insert_at = None
+              for index, line in enumerate(lines):
+                  if "Download Post Quantum Security" in line and "releases/download" in line:
+                      insert_at = min(index + 2, len(lines))
+                      break
+              if insert_at is None:
+                  insert_at = 0
+              lines[insert_at:insert_at] = ["", block, ""]
+              updated = "\n".join(lines)
+              if text.endswith("\n"):
+                  updated += "\n"
+
+          if updated != text:
+              path.write_text(updated, encoding="utf-8")
+          '@
+
+          if (git diff --quiet -- README.md) {
+            Write-Host "README Windows EXE link is already current."
+            exit 0
+          }
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update README Windows EXE download"
+          git pull --rebase origin main
+          git push origin main
+
+      - name: Write EXE release summary
+        shell: pwsh
+        run: |
+          @"
+          ## Windows EXE Release
+
+          - Version: `${{ steps.release.outputs.version }}`
+          - Release: `${{ steps.release.outputs.tag }}`
+          - Executable: `${{ steps.exe.outputs.name }}`
+          - SHA-256: `${{ steps.exe.outputs.sha256 }}`
+          - Embedded runtime: liboqs / ML-KEM-768 / ML-DSA-65
+          - README download link: synchronized
+          "@ >> $env:GITHUB_STEP_SUMMARY
