@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - .github/workflows/windows-exe-release.yml
+      - .github/scripts/generate_windows_icon.py
+      - .github/scripts/generate_windows_version_info.py
+      - .github/scripts/pyinstaller_oqs_runtime.py
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
   workflow_dispatch:
@@ -103,7 +106,7 @@ jobs:
           path: source
           fetch-depth: 0
 
-      - name: Checkout main for README update
+      - name: Checkout main for build infrastructure and README
         uses: actions/checkout@v7
         with:
           ref: main
@@ -123,7 +126,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
-          python -m pip install pyinstaller
+          python -m pip install pyinstaller pillow
 
       - name: Build minimal liboqs runtime
         id: liboqs
@@ -170,6 +173,52 @@ jobs:
         run: |
           python -c "import oqs; assert 'ML-KEM-768' in oqs.get_enabled_kem_mechanisms(); assert 'ML-DSA-65' in oqs.get_enabled_sig_mechanisms(); print('liboqs runtime validation passed.')"
 
+      - name: Prepare Windows icon and version metadata
+        id: metadata
+        shell: pwsh
+        run: |
+          $sourceIconScript = Join-Path $env:GITHUB_WORKSPACE "source\.github\scripts\generate_windows_icon.py"
+          $mainIconScript = Join-Path $env:GITHUB_WORKSPACE "repository\.github\scripts\generate_windows_icon.py"
+          $sourceVersionScript = Join-Path $env:GITHUB_WORKSPACE "source\.github\scripts\generate_windows_version_info.py"
+          $mainVersionScript = Join-Path $env:GITHUB_WORKSPACE "repository\.github\scripts\generate_windows_version_info.py"
+          $sourceRuntimeHook = Join-Path $env:GITHUB_WORKSPACE "source\.github\scripts\pyinstaller_oqs_runtime.py"
+          $mainRuntimeHook = Join-Path $env:GITHUB_WORKSPACE "repository\.github\scripts\pyinstaller_oqs_runtime.py"
+
+          if (Test-Path $sourceIconScript) { $iconScript = $sourceIconScript } else { $iconScript = $mainIconScript }
+          if (Test-Path $sourceVersionScript) { $versionScript = $sourceVersionScript } else { $versionScript = $mainVersionScript }
+          if (Test-Path $sourceRuntimeHook) { $runtimeHook = $sourceRuntimeHook } else { $runtimeHook = $mainRuntimeHook }
+
+          foreach ($required in @($iconScript, $versionScript, $runtimeHook)) {
+            if (-not (Test-Path $required)) {
+              throw "Required EXE build resource not found: $required"
+            }
+          }
+
+          $resourceDir = Join-Path $env:GITHUB_WORKSPACE "windows-build-resources"
+          New-Item -ItemType Directory -Force -Path $resourceDir | Out-Null
+
+          $icon = Join-Path $resourceDir "PostQuantumSecurity.ico"
+          $versionFile = Join-Path $resourceDir "windows-version-info.txt"
+
+          python "$iconScript" --output "$icon"
+          if ($LASTEXITCODE -ne 0 -or -not (Test-Path $icon)) {
+            throw "Windows icon generation failed."
+          }
+
+          python "$versionScript" --version "${{ steps.release.outputs.version }}" --output "$versionFile"
+          if ($LASTEXITCODE -ne 0 -or -not (Test-Path $versionFile)) {
+            throw "Windows version resource generation failed."
+          }
+
+          python -c "from PIL import Image; import sys; icon=Image.open(sys.argv[1]); required={(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)}; sizes=set(icon.info.get('sizes',set())); assert icon.format == 'ICO'; assert required.issubset(sizes), f'Missing icon sizes: {sorted(required-sizes)}'; print('ICO resource validated:', sorted(sizes))" "$icon"
+          if ($LASTEXITCODE -ne 0) {
+            throw "Generated Windows icon validation failed."
+          }
+
+          "icon=$icon" >> $env:GITHUB_OUTPUT
+          "version_file=$versionFile" >> $env:GITHUB_OUTPUT
+          "runtime_hook=$runtimeHook" >> $env:GITHUB_OUTPUT
+
       - name: Compile Windows executable
         id: exe
         shell: pwsh
@@ -178,11 +227,9 @@ jobs:
           $version = "${{ steps.release.outputs.version }}"
           $name = "Post-Quantum-Security-v$version"
           $oqsDll = "${{ steps.liboqs.outputs.dll }}"
-          $runtimeHook = Join-Path $env:GITHUB_WORKSPACE "repository\.github\scripts\pyinstaller_oqs_runtime.py"
-
-          if (-not (Test-Path $runtimeHook)) {
-            throw "PyInstaller runtime hook not found: $runtimeHook"
-          }
+          $runtimeHook = "${{ steps.metadata.outputs.runtime_hook }}"
+          $icon = "${{ steps.metadata.outputs.icon }}"
+          $versionFile = "${{ steps.metadata.outputs.version_file }}"
 
           python -m PyInstaller `
             --noconfirm `
@@ -190,6 +237,8 @@ jobs:
             --onefile `
             --windowed `
             --name $name `
+            --icon "$icon" `
+            --version-file "$versionFile" `
             --runtime-hook "$runtimeHook" `
             --hidden-import oqs `
             --collect-submodules oqs `
@@ -219,6 +268,40 @@ jobs:
           "sha=$shaFile" >> $env:GITHUB_OUTPUT
           "sha256=$hash" >> $env:GITHUB_OUTPUT
           "name=$name.exe" >> $env:GITHUB_OUTPUT
+
+      - name: Validate Windows EXE resources and details
+        shell: pwsh
+        working-directory: source
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          EXE_PATH: ${{ steps.exe.outputs.path }}
+        run: |
+          $info = (Get-Item $env:EXE_PATH).VersionInfo
+          $expected = @{
+            CompanyName = "BylickiLabs"
+            FileDescription = "BylickiLabs Post Quantum Security"
+            FileVersion = "$env:VERSION.0"
+            InternalName = "PostQuantumSecurity"
+            LegalCopyright = "Copyright © 2026 Thorsten Bylicki / BylickiLabs"
+            OriginalFilename = "Post-Quantum-Security-v$env:VERSION.exe"
+            ProductName = "Post Quantum Security"
+            ProductVersion = "$env:VERSION"
+            Comments = "BylickiLabs Post Quantum Security is a Windows desktop application for post-quantum encryption, digital signatures, secure key management and local encrypted storage."
+          }
+
+          foreach ($key in $expected.Keys) {
+            $actual = [string]$info.$key
+            if ($actual -ne $expected[$key]) {
+              throw "Windows EXE metadata mismatch for $key. Expected '$($expected[$key])', got '$actual'."
+            }
+          }
+
+          python -c "import pefile,sys; pe=pefile.PE(sys.argv[1]); ids={entry.id for entry in pe.DIRECTORY_ENTRY_RESOURCE.entries if entry.id is not None}; assert 14 in ids, 'RT_GROUP_ICON resource missing'; assert 16 in ids, 'RT_VERSION resource missing'; print('Windows icon and version resources validated.')" "$env:EXE_PATH"
+          if ($LASTEXITCODE -ne 0) {
+            throw "Windows PE resource validation failed."
+          }
+
+          Write-Host "Windows Explorer detail metadata validated successfully."
 
       - name: Upload Windows EXE artifact
         uses: actions/upload-artifact@v7
@@ -317,5 +400,8 @@ jobs:
           - Executable: `${{ steps.exe.outputs.name }}`
           - SHA-256: `${{ steps.exe.outputs.sha256 }}`
           - Embedded runtime: liboqs / ML-KEM-768 / ML-DSA-65
+          - Windows icon: embedded and validated
+          - Windows version metadata: embedded and validated
+          - Languages: German / English
           - README download link: synchronized
           "@ >> $env:GITHUB_STEP_SUMMARY
