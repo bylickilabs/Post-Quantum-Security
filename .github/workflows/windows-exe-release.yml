@@ -20,7 +20,7 @@ permissions:
 
 concurrency:
   group: pqs-windows-exe-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build-exe:
@@ -41,7 +41,14 @@ jobs:
           } elseif ($env:INPUT_TAG) {
             $tag = $env:INPUT_TAG.Trim()
           } else {
-            $tag = gh release view --repo $env:GH_REPO --json tagName --jq ".tagName"
+            $headers = @{
+              Authorization = "Bearer $env:GH_TOKEN"
+              Accept = "application/vnd.github+json"
+              "X-GitHub-Api-Version" = "2022-11-28"
+              "User-Agent" = "pqs-windows-exe-release"
+            }
+            $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$env:GH_REPO/releases/latest" -Headers $headers -Method Get
+            $tag = [string]$release.tag_name
           }
 
           if (-not $tag) {
@@ -63,12 +70,26 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ steps.release.outputs.tag }}
         run: |
+          $headers = @{
+            Authorization = "Bearer $env:GH_TOKEN"
+            Accept = "application/vnd.github+json"
+            "X-GitHub-Api-Version" = "2022-11-28"
+            "User-Agent" = "pqs-windows-exe-release"
+          }
+          $encodedTag = [uri]::EscapeDataString($env:RELEASE_TAG)
+          $uri = "https://api.github.com/repos/$env:GH_REPO/releases/tags/$encodedTag"
           $deadline = (Get-Date).AddMinutes(10)
+
           do {
-            gh release view $env:RELEASE_TAG --repo $env:GH_REPO --json tagName *> $null
-            if ($LASTEXITCODE -eq 0) {
-              Write-Host "Release $env:RELEASE_TAG is available."
-              exit 0
+            try {
+              $release = Invoke-RestMethod -Uri $uri -Headers $headers -Method Get
+              if ($release.tag_name -eq $env:RELEASE_TAG) {
+                Write-Host "Release $env:RELEASE_TAG is available."
+                exit 0
+              }
+            } catch {
+              Start-Sleep -Seconds 5
+              continue
             }
             Start-Sleep -Seconds 5
           } while ((Get-Date) -lt $deadline)
