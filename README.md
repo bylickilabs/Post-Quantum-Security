@@ -9,6 +9,12 @@
 | [⬇ Download Post Quantum Security v1.0.0](https://github.com/bylickilabs/Post-Quantum-Security/releases/download/v1.0.0/Post-Quantum-Security-v1.0.0.zip) | [⬇ Latest Release](https://github.com/bylickilabs/Post-Quantum-Security/releases/latest) |
 |---|---|
 
+<!-- WINDOWS-EXE-RELEASE:START -->
+| [⬇ Download Post Quantum Security v1.0.0 (.exe)](https://github.com/bylickilabs/Post-Quantum-Security/releases/download/v1.0.0/Post-Quantum-Security-v1.0.0.exe) | [⬇ Latest Release](https://github.com/bylickilabs/Post-Quantum-Security/releases/latest) |
+|---|---|
+<!-- WINDOWS-EXE-RELEASE:END -->
+
+
 <!-- DEPENDENCY-GRAPH-SNAPSHOT:START -->
 ## Dependency Graph Snapshot — pip
 
