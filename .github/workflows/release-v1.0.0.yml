@@ -1,0 +1,145 @@
+name: Publish Post Quantum Security v1.0.0
+
+on:
+  push:
+    branches:
+      - release-v1.0.0-temp
+    paths:
+      - .github/workflows/release-v1.0.0.yml
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and Publish v1.0.0
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout release source
+        uses: actions/checkout@v7
+        with:
+          ref: 08fe5aa9f53bb2ffb8d7939981c837af8f50bdcd
+          fetch-depth: 0
+
+      - name: Verify release version
+        shell: pwsh
+        run: |
+          $content = Get-Content "app/constants.py" -Raw
+          $match = [regex]::Match($content, 'APP_VERSION\s*=\s*"([^"]+)"')
+          if (-not $match.Success) {
+            throw "APP_VERSION could not be determined."
+          }
+          if ($match.Groups[1].Value -ne "1.0.0") {
+            throw "APP_VERSION must be 1.0.0 for this release."
+          }
+
+      - name: Verify release source tree
+        shell: pwsh
+        run: |
+          $required = @(
+            "README.md",
+            "SECURITY.md",
+            "main.py",
+            "requirements.txt",
+            "app",
+            "crypto",
+            "gui",
+            "install-windows.ps1",
+            "run_windows.bat"
+          )
+          foreach ($path in $required) {
+            if (-not (Test-Path $path)) {
+              throw "Required release path is missing: $path"
+            }
+          }
+
+      - name: Reject sensitive tracked files
+        shell: pwsh
+        run: |
+          $tracked = git ls-files
+          $forbidden = $tracked | Where-Object {
+            $_ -match '(^|/)\.env($|\.)' -or
+            $_ -match '\.(qkey|qsigkey|pem|p12|pfx|sqlite|sqlite3|db)$'
+          }
+          if ($forbidden) {
+            $forbidden | ForEach-Object { Write-Error "Forbidden release file: $_" }
+            throw "Sensitive files are tracked and release packaging has been blocked."
+          }
+
+      - name: Create release package
+        id: package
+        shell: pwsh
+        run: |
+          $version = "1.0.0"
+          $root = "release"
+          $packageDir = Join-Path $root "Post-Quantum-Security-v$version"
+          New-Item -ItemType Directory -Force -Path $packageDir | Out-Null
+
+          Copy-Item "README.md" $packageDir
+          Copy-Item "SECURITY.md" $packageDir
+          Copy-Item "requirements.txt" $packageDir
+          Copy-Item "main.py" $packageDir
+          Copy-Item "install-windows.ps1" $packageDir
+          Copy-Item "run_windows.bat" $packageDir
+          if (Test-Path ".gitignore") { Copy-Item ".gitignore" $packageDir }
+          if (Test-Path "LICENSE") { Copy-Item "LICENSE" $packageDir }
+          if (Test-Path "PQS.png") { Copy-Item "PQS.png" $packageDir }
+
+          Copy-Item "app" $packageDir -Recurse
+          Copy-Item "crypto" $packageDir -Recurse
+          Copy-Item "gui" $packageDir -Recurse
+
+          $zip = Join-Path $root "Post-Quantum-Security-v$version.zip"
+          Compress-Archive -Path "$packageDir\*" -DestinationPath $zip -CompressionLevel Optimal
+
+          $hash = (Get-FileHash -Path $zip -Algorithm SHA256).Hash.ToLower()
+          $shaFile = "$zip.sha256"
+          "$hash  $(Split-Path $zip -Leaf)" | Set-Content -Path $shaFile -Encoding ascii
+
+          "zip=$zip" >> $env:GITHUB_OUTPUT
+          "sha=$shaFile" >> $env:GITHUB_OUTPUT
+          "sha256=$hash" >> $env:GITHUB_OUTPUT
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Post-Quantum-Security-v1.0.0
+          path: |
+            ${{ steps.package.outputs.zip }}
+            ${{ steps.package.outputs.sha }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v1.0.0" `
+            "${{ steps.package.outputs.zip }}" `
+            "${{ steps.package.outputs.sha }}" `
+            --target "08fe5aa9f53bb2ffb8d7939981c837af8f50bdcd" `
+            --title "Post Quantum Security v1.0.0" `
+            --generate-notes `
+            --latest
+
+      - name: Verify published release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "v1.0.0" --json tagName,name,isDraft,isPrerelease,url
+
+      - name: Write release summary
+        shell: pwsh
+        run: |
+          @"
+          ## Post Quantum Security v1.0.0
+
+          - Release target: `08fe5aa9f53bb2ffb8d7939981c837af8f50bdcd`
+          - Package: `Post-Quantum-Security-v1.0.0.zip`
+          - SHA-256: `${{ steps.package.outputs.sha256 }}`
+          - Latest release: yes
+          - Sensitive tracked files: blocked
+          "@ >> $env:GITHUB_STEP_SUMMARY
