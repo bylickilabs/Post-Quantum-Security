@@ -1,5 +1,5 @@
-| [![Publish Post Quantum Security v1.0.0](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/release-v1.0.0.yml/badge.svg)](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/release-v1.0.0.yml) |
-|---|
+| [![PQS Repository Integrity](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/repository-integrity.yml/badge.svg)](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/repository-integrity.yml) | [![Publish Post Quantum Security v1.0.0](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/release-v1.0.0.yml/badge.svg)](https://github.com/bylickilabs/Post-Quantum-Security/actions/workflows/release-v1.0.0.yml) |
+|---|---|
 
 | <img width="1280" height="640" alt="PQS" src="https://github.com/user-attachments/assets/4e17ea71-5ba9-44a0-9ec0-e696733e7a44" /> |
 |---|
